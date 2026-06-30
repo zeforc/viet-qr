@@ -1,0 +1,32 @@
+{
+  "name": "viet-qr",
+  "version": "1.0.0",
+  "description": "Thư viện tạo mã QR ngân hàng chuẩn VietQR/EMVCo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeforc/viet-qr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeforc/viet-qr/issues"
+  },
+  "homepage": "https://github.com/zeforc/viet-qr#readme",
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  },
+  "pnpm": {
+    "approvedBuilds": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}
