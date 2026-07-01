@@ -1,0 +1,196 @@
+/* variables */
+:root {
+  --vqr-font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --vqr-bg-card: #ffffff;
+  --vqr-text-primary: #1e293b;
+  --vqr-text-secondary: #64748b;
+  --vqr-border: #e2e8f0;
+  --vqr-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* 
+ * 1. Compact Card Template 
+ */
+.vqr-compact-card {
+  font-family: var(--vqr-font-family);
+  background: var(--vqr-bg-card);
+  border: 1px solid var(--vqr-border);
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: var(--vqr-shadow);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.vqr-compact-card * {
+  box-sizing: border-box;
+}
+
+.vqr-compact-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.vqr-compact-card__logo {
+  height: 32px;
+  width: auto;
+}
+
+.vqr-compact-card__bank-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--vqr-text-primary);
+  margin: 0;
+}
+
+.vqr-compact-card__qr-wrapper {
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--vqr-border);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vqr-compact-card__qr-wrapper svg,
+.vqr-compact-card__qr-wrapper canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.vqr-compact-card__info {
+  text-align: left;
+}
+
+.vqr-compact-card__info-row {
+  margin-bottom: 8px;
+}
+
+.vqr-compact-card__info-row:last-child {
+  margin-bottom: 0;
+}
+
+.vqr-compact-card__label {
+  font-size: 12px;
+  color: var(--vqr-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 4px 0;
+  display: block;
+}
+
+.vqr-compact-card__value {
+  font-size: 15px;
+  color: var(--vqr-text-primary);
+  font-weight: 600;
+  margin: 0;
+}
+
+.vqr-compact-card__amount {
+  font-size: 18px;
+  color: #10b981;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 
+ * 2. Pay Standee Template 
+ */
+.vqr-pay-standee {
+  font-family: var(--vqr-font-family);
+  background: var(--vqr-bg-card);
+  border: 1px solid var(--vqr-border);
+  border-radius: 24px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: var(--vqr-shadow);
+  box-sizing: border-box;
+}
+
+.vqr-pay-standee * {
+  box-sizing: border-box;
+}
+
+.vqr-pay-standee__banner {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
+  padding: 32px 24px 64px 24px;
+  text-align: center;
+}
+
+.vqr-pay-standee__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vqr-pay-standee__subtitle {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.vqr-pay-standee__body {
+  background: var(--vqr-bg-card);
+  border-radius: 24px 24px 0 0;
+  margin-top: -32px;
+  padding: 32px 24px 24px 24px;
+  position: relative;
+}
+
+.vqr-pay-standee__qr-wrapper {
+  background: white;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--vqr-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  margin: -64px auto 24px auto;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vqr-pay-standee__qr-wrapper svg,
+.vqr-pay-standee__qr-wrapper canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.vqr-pay-standee__info {
+  text-align: center;
+}
+
+.vqr-pay-standee__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--vqr-text-primary);
+  margin: 0 0 8px 0;
+}
+
+.vqr-pay-standee__account {
+  font-size: 16px;
+  color: var(--vqr-text-secondary);
+  margin: 0;
+  font-family: monospace;
+  letter-spacing: 0.1em;
+}
+
+.vqr-pay-standee__bank {
+  font-size: 14px;
+  color: var(--vqr-text-secondary);
+  font-weight: 600;
+  margin: 8px 0 0 0;
+}

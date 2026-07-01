@@ -47,6 +47,31 @@ function PaymentPage() {
 }
 ```
 
+## 🎨 Pre-built UI Templates
+
+Nếu bạn muốn có ngay một mã QR đẹp mắt với Card hiển thị Logo ngân hàng, Số tài khoản, Số tiền thay vì chỉ hiển thị mỗi mã QR trống không, hãy sử dụng gói giao diện có sẵn của chúng tôi!
+
+```bash
+npm install @viet-qr/templates
+```
+
+```tsx
+import { CompactCard } from '@viet-qr/templates/react';
+import '@viet-qr/templates/style.css'; // Bắt buộc import css nếu hệ thống không tự xử lý
+
+function App() {
+  return (
+    <CompactCard 
+      bankId="VCB" 
+      accountNo="1122334455"
+      accountName="NGUYEN NGOC A"
+      amount={50000}
+      theme="dark"
+    />
+  );
+}
+```
+
 ## API Reference (Props)
 
 Component `<VietQR />` kế thừa toàn bộ thuộc tính cấu hình chuẩn NAPAS từ `@viet-qr/core` cộng thêm các tuỳ chỉnh về mặt hiển thị.

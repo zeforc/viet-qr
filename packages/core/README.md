@@ -1,34 +1,53 @@
 # @viet-qr/core
 
-Thư viện lõi (Core) sinh mã chuẩn EMVCo dành cho chuẩn thanh toán VietQR / NAPAS 247. 
+Thư viện lõi (Core) sinh mã chuẩn EMVCo dành cho chuẩn thanh toán VietQR / NAPAS 247.
+
 Được thiết kế với tiêu chí **Zero Dependencies** (Không phụ thuộc thư viện bên ngoài), siêu nhẹ, siêu nhanh và hoạt động hoàn toàn Offline.
 
-[![npm version](https://img.shields.io/npm/v/@viet-qr/core.svg)](https://www.npmjs.com/package/@viet-qr/core)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/zeforc/viet-qr/blob/main/LICENSE)
+<div align="center">
+  <p>
+    <a href="https://www.npmjs.com/package/@viet-qr/core"><img src="https://img.shields.io/npm/v/@viet-qr/core.svg" alt="npm version" /></a>
+    <a href="https://github.com/zeforc/viet-qr/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+  </p>
 
-🌍 **Trang chủ & Demo:** [viet-qr.zeneo.app](https://viet-qr.zeneo.app)
-## Tính năng nổi bật
-- 🚀 Sinh mã QR tĩnh và động chuẩn NAPAS 247.
-- 🎯 Tuân thủ chặt chẽ tiêu chuẩn EMVCo (bao gồm Tag 59: Merchant Name, Tag 60: Merchant City, và Service Code `QRIBFTTA`).
-- ⚡ Tính toán mã kiểm tra CRC16-CCITT chuẩn xác, tốc độ cao bằng thuật toán Bitwise nội bộ.
-- 🏦 Tích hợp sẵn cơ sở dữ liệu tra cứu ngân hàng Offline với tốc độ Indexing **O(1)**.
-- 🛡️ Tự động chuẩn hóa nội dung (Sanitization): Xóa dấu tiếng Việt, xử lý ký tự lạ, và giới hạn độ dài.
-- 📦 Tương thích với mọi môi trường JavaScript/TypeScript (Node.js, React, Vue, Svelte, React Native,...).
+  <h3>
+    Tìm hiểu và trải nghiệm <br/>
+    <a href="https://viet-qr.zeneo.app">viet-qr.zeneo.app</a>
+  </h3>
+</div>
+<br>
 
-## 🧩 Hệ sinh thái UI (UI Frameworks)
+## Tính năng nổi bật của @viet-qr
+
+| Tính năng | Mô tả chi tiết |
+| :--- | :--- |
+| 🚀 **Tạo mã VietQR** | Hỗ trợ tạo cả mã QR **tĩnh** và **động** (kèm số tiền & nội dung) theo chuẩn NAPAS 247. |
+| 🎯 **Chuẩn xác EMVCo** | Tuân thủ chặt chẽ cấu trúc chuẩn, bao gồm *Tag 59 (Merchant Name)*, *Tag 60 (Merchant City)*, và Service Code `QRIBFTTA`. |
+| ⚡ **Hiệu năng cực cao** | Tự động tính toán mã kiểm tra CRC16-CCITT siêu tốc bằng thuật toán Bitwise nội bộ (Zero-dependencies). |
+| 🏦 **Offline Database** | Tích hợp sẵn cơ sở dữ liệu tra cứu ngân hàng (Tên, BIN, ShortName) với tốc độ truy xuất **O(1)**. |
+| 🛡️ **Auto-Sanitization** | Tự động chuẩn hóa dữ liệu: Xóa dấu tiếng Việt, xử lý ký tự lạ, và tự động cắt chuỗi nếu vượt quá giới hạn cho phép. |
+| 💎 **100% Type-Safe** | Viết hoàn toàn bằng TypeScript, cung cấp tính năng autocompletion và kiểm tra kiểu tĩnh (Static Typing) mạnh mẽ. |
+| 📦 **Universal & Isomorphic**| Hoạt động hoàn hảo trên mọi môi trường JS/TS: Node.js, React, Vue, Svelte, React Native,... |
+
+## Hệ sinh thái UI (UI Frameworks)
 
 Vì `@viet-qr/core` là bộ lõi xử lý thuật toán (chỉ sinh ra chuỗi string), chúng tôi đã xây dựng sẵn các gói mở rộng (UI Wrappers) để giúp bạn render ra mã QR một cách nhanh chóng và tối ưu nhất cho từng Framework:
 
-- **React / Next.js:** Giới thiệu gói [`@viet-qr/react`](https://www.npmjs.com/package/@viet-qr/react) - Chuyên dụng cho React, tự động vẽ QR bằng SVG siêu nét và hỗ trợ chèn Logo ở giữa.
-- **Vue / Svelte:** (Đang phát triển)
+| Package | Framework | Mô tả |
+| :--- | :--- | :--- |
+| [`@viet-qr/react`](https://www.npmjs.com/package/@viet-qr/react) | React / Next.js | Wrapper chuyên dụng, tự động vẽ QR bằng SVG sắc nét. |
+| [`@viet-qr/vue`](https://www.npmjs.com/package/@viet-qr/vue) | Vue 3 / Nuxt | Wrapper tối ưu cho hệ sinh thái Vue 3. |
+| [`@viet-qr/svelte`](https://www.npmjs.com/package/@viet-qr/svelte) | Svelte 5 / Kit | Wrapper nhẹ nhàng, tương thích hoàn hảo Svelte 5. |
+| [`@viet-qr/templates`](https://www.npmjs.com/package/@viet-qr/templates) | Đa nền tảng | Các mẫu Card thanh toán (hiển thị Logo, Tên, Số tiền...) thiết kế sẵn tuyệt đẹp cho cả 3 frameworks trên. |
 
 ## Cài đặt
 
 ```bash
+# npm
 npm install @viet-qr/core
-# hoặc
+# pnpm
 pnpm add @viet-qr/core
-# hoặc
+# yarn
 yarn add @viet-qr/core
 ```
 

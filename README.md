@@ -6,6 +6,9 @@ Dự án được thiết kế theo kiến trúc **Monorepo** nhằm tách biệ
 
 [![npm core](https://img.shields.io/npm/v/@viet-qr/core.svg?label=@viet-qr/core)](https://www.npmjs.com/package/@viet-qr/core)
 [![npm react](https://img.shields.io/npm/v/@viet-qr/react.svg?label=@viet-qr/react)](https://www.npmjs.com/package/@viet-qr/react)
+[![npm vue](https://img.shields.io/npm/v/@viet-qr/vue.svg?label=@viet-qr/vue)](https://www.npmjs.com/package/@viet-qr/vue)
+[![npm svelte](https://img.shields.io/npm/v/@viet-qr/svelte.svg?label=@viet-qr/svelte)](https://www.npmjs.com/package/@viet-qr/svelte)
+[![npm templates](https://img.shields.io/npm/v/@viet-qr/templates.svg?label=@viet-qr/templates)](https://www.npmjs.com/package/@viet-qr/templates)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/zeforc/viet-qr/blob/main/LICENSE)
 
 🌍 **Trang chủ & Demo:** [viet-qr.zeneo.app](https://viet-qr.zeneo.app)
@@ -16,10 +19,11 @@ Kho lưu trữ này chứa các gói (packages) sau:
 
 | Package | Mô tả | Phiên bản |
 |---------|-------|-----------|
-| [`@viet-qr/core`](./packages/core) | Thư viện lõi xử lý thuật toán sinh chuỗi EMVCo, mã kiểm tra CRC16 và tra cứu ngân hàng. **Zero-dependency**, cực kỳ nhẹ. | [![npm version](https://img.shields.io/npm/v/@viet-qr/core.svg)](https://www.npmjs.com/package/@viet-qr/core) |
-| [`@viet-qr/react`](./packages/react) | React Component Wrapper. Sử dụng Core và thư viện chuyên dụng để render ra mã QR dạng SVG/Canvas tự động cho dự án React. | [![npm version](https://img.shields.io/npm/v/@viet-qr/react.svg)](https://www.npmjs.com/package/@viet-qr/react) |
-| `@viet-qr/vue` *(Dự kiến)* | Dành cho các dự án sử dụng Vue.js | Lên kế hoạch |
-| `@viet-qr/svelte` *(Dự kiến)* | Dành cho các dự án sử dụng Svelte | Lên kế hoạch |
+| [`@viet-qr/core`](./packages/core) | Thư viện lõi sinh chuỗi EMVCo và tra cứu ngân hàng. **Zero-dependency**. | [![npm version](https://img.shields.io/npm/v/@viet-qr/core.svg)](https://www.npmjs.com/package/@viet-qr/core) |
+| [`@viet-qr/react`](./packages/react) | React Component Wrapper để vẽ mã QR trên React. | [![npm version](https://img.shields.io/npm/v/@viet-qr/react.svg)](https://www.npmjs.com/package/@viet-qr/react) |
+| [`@viet-qr/vue`](./packages/vue) | Vue Component Wrapper dành cho hệ sinh thái Vue 3. | [![npm version](https://img.shields.io/npm/v/@viet-qr/vue.svg)](https://www.npmjs.com/package/@viet-qr/vue) |
+| [`@viet-qr/svelte`](./packages/svelte) | Svelte Component Wrapper tương thích với Svelte 5. | [![npm version](https://img.shields.io/npm/v/@viet-qr/svelte.svg)](https://www.npmjs.com/package/@viet-qr/svelte) |
+| [`@viet-qr/templates`](./packages/templates) | Bộ sưu tập các mẫu UI (Card, Standee) thiết kế sẵn cực đẹp. | [![npm version](https://img.shields.io/npm/v/@viet-qr/templates.svg)](https://www.npmjs.com/package/@viet-qr/templates) |
 
 ---
 
@@ -75,6 +79,31 @@ function App() {
 }
 ```
 👉 **Đọc chi tiết tại:** [Tài liệu `@viet-qr/react`](./packages/react/README.md)
+
+### 3. Sử dụng Giao diện làm sẵn (Pre-built Templates)
+Nếu bạn không muốn tự code giao diện thẻ QR, hãy cài gói `templates` và sử dụng `CompactCard` hoặc `PayStandee` siêu đẹp (hỗ trợ cả React, Vue, Svelte).
+
+```bash
+npm install @viet-qr/templates
+```
+
+```tsx
+import { CompactCard } from '@viet-qr/templates/react'; // hoặc /vue, /svelte
+import '@viet-qr/templates/style.css';
+
+function App() {
+  return (
+    <CompactCard 
+      bankId="VCB" 
+      accountNo="1122334455"
+      accountName="NGUYEN NGOC A"
+      amount={50000}
+      theme="dark"
+    />
+  );
+}
+```
+👉 **Đọc chi tiết tại:** [Tài liệu `@viet-qr/templates`](./packages/templates/README.md)
 
 ---
 

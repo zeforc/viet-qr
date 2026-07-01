@@ -1,6 +1,6 @@
 {
   "name": "@viet-qr/react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "author": "Zeforc",
   "keywords": ["vietqr", "viet-qr", "napas", "emvco", "qr-code", "qr-payment", "payment", "vietnam-qr", "react-qr", "react-vietqr"],
@@ -31,7 +31,7 @@
     "react": ">=18.0.0"
   },
   "dependencies": {
-    "@viet-qr/core": "workspace:*",
+    "@viet-qr/core": "workspace:^",
     "qrcode.react": "^4.2.0"
   },
   "devDependencies": {

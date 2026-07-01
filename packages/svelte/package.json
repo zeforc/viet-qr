@@ -1,0 +1,49 @@
+{
+  "name": "@viet-qr/svelte",
+  "version": "1.1.0",
+  "license": "MIT",
+  "author": "Zeforc",
+  "keywords": ["vietqr", "viet-qr", "napas", "emvco", "qr-code", "qr-payment", "payment", "vietnam-qr", "svelte-qr", "svelte-vietqr"],
+  "description": "Svelte wrapper for VietQR",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeforc/viet-qr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeforc/viet-qr/issues"
+  },
+  "homepage": "https://github.com/zeforc/viet-qr#readme",
+  "type": "module",
+  "main": "./dist/index.js",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "svelte-package",
+    "dev": "svelte-package -w"
+  },
+  "peerDependencies": {
+    "svelte": "^4.0.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "@viet-qr/core": "workspace:^",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.3.1",
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@types/qrcode": "^1.5.6",
+    "svelte": "^5.56.4",
+    "svelte-check": "^3.8.4",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4"
+  }
+}
