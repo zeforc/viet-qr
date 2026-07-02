@@ -38,7 +38,7 @@ Vì `@viet-qr/core` là bộ lõi xử lý thuật toán (chỉ sinh ra chuỗi 
 | [`@viet-qr/react`](https://www.npmjs.com/package/@viet-qr/react) | React / Next.js | Wrapper chuyên dụng, tự động vẽ QR bằng SVG sắc nét. |
 | [`@viet-qr/vue`](https://www.npmjs.com/package/@viet-qr/vue) | Vue 3 / Nuxt | Wrapper tối ưu cho hệ sinh thái Vue 3. |
 | [`@viet-qr/svelte`](https://www.npmjs.com/package/@viet-qr/svelte) | Svelte 5 / Kit | Wrapper nhẹ nhàng, tương thích hoàn hảo Svelte 5. |
-| [`@viet-qr/templates`](https://www.npmjs.com/package/@viet-qr/templates) | Đa nền tảng | Các mẫu Card thanh toán (hiển thị Logo, Tên, Số tiền...) thiết kế sẵn tuyệt đẹp cho cả 3 frameworks trên. |
+| [`@viet-qr/templates`](https://www.npmjs.com/package/@viet-qr/templates) | Đa nền tảng | Các mẫu Card thanh toán thiết kế sẵn tuyệt đẹp cho React, Vue, Svelte và Vanilla JS (Web Components). |
 
 ## Cài đặt
 
@@ -98,6 +98,37 @@ console.log(bank);
   fullName: "Ngân hàng TMCP Ngoại thương Việt Nam"
 }
 */
+```
+
+### 3. Cập nhật danh sách ngân hàng động (Runtime)
+
+Từ phiên bản `1.2.0`, bạn có thể lấy danh sách ngân hàng từ API hoặc cập nhật thủ công:
+
+```typescript
+import { fetchBankList, setBankList } from '@viet-qr/core';
+
+// Tải danh sách ngân hàng từ một URL (CDN/API)
+await fetchBankList('https://example.com/banks.json');
+
+// Hoặc tự ghi đè danh sách bằng dữ liệu tùy chỉnh
+setBankList([
+  { bin: "970436", shortName: "VCB", name: "Vietcombank", fullName: "..." },
+  // ...
+]);
+```
+
+### 4. Tiện ích xử lý chuỗi (Utilities)
+
+```typescript
+import { removeVietnameseAccents, sanitizeAccountName } from '@viet-qr/core';
+
+// Xóa dấu tiếng Việt, giữ lại các ký tự đặc biệt
+console.log(removeVietnameseAccents("Nguyễn Văn A - 123")); 
+// => "Nguyen Van A - 123"
+
+// Chuẩn hóa tên tài khoản (Xóa dấu, viết hoa, loại bỏ ký tự không hợp lệ)
+console.log(sanitizeAccountName("Nguyễn Văn A - 123")); 
+// => "NGUYEN VAN A  123"
 ```
 
 ## API Reference

@@ -83,5 +83,34 @@ Component `<VietQR />` kế thừa toàn bộ thuộc tính cấu hình chuẩn 
 | `bgColor`       | `string`            | Màu nền của QR (Mặc định: `#FFFFFF`).                                                 |
 | `imageSettings` | `object`            | Cấu hình chèn Logo tùy chỉnh vào trung tâm mã QR.                                     |
 
+## ⚠️ Lưu ý cho người dùng Svelte 4
+
+Bắt đầu từ phiên bản `v1.1.0`, thư viện được phân phối giữ nguyên mã nguồn TypeScript (`<script lang="ts">`) để tận dụng tối đa sức mạnh kiểu dữ liệu. Svelte 5 tự động hiểu cú pháp này, nhưng nếu bạn đang dùng **Svelte 4** (hoặc Vite + Svelte cũ), bạn cần cấu hình công cụ build để xử lý TypeScript trong thư viện.
+
+**1. Trong `svelte.config.js`:**
+Bạn cần bật `vitePreprocess()` để dịch TypeScript:
+```javascript
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+export default {
+  preprocess: vitePreprocess()
+};
+```
+
+**2. Trong `vite.config.ts` (hoặc cấu hình Webpack/Rollup tương đương):**
+Bạn cần loại trừ thư viện khỏi quá trình gộp (pre-bundling) mặc định của Vite, để Svelte compiler có thể trực tiếp xử lý các file gốc:
+```typescript
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+  plugins: [svelte()],
+  optimizeDeps: {
+    // Báo cho Vite biết hãy để Svelte xử lý các gói này
+    exclude: ['@viet-qr/svelte', '@viet-qr/templates']
+  }
+});
+```
+
 ## Giấy phép (License)
 MIT

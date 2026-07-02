@@ -1,6 +1,6 @@
 {
   "name": "viet-qr",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "description": "Thư viện tạo mã QR ngân hàng chuẩn VietQR/EMVCo",
   "private": true,
   "scripts": {

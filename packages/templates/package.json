@@ -1,14 +1,18 @@
 {
   "name": "@viet-qr/templates",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "license": "MIT",
   "author": "Zeforc",
   "keywords": [
     "vietqr",
     "viet-qr",
+    "viet-qr-react",
+    "viet-qr-vue",
+    "viet-qr-svelte",
     "viet-qr-templates",
+    "viet-qr-payment",
     "templates",
-    "react-vietqr"
+    "qr-code"
   ],
   "description": "Premium UI templates for VietQR",
   "repository": {
@@ -19,6 +23,10 @@
     "url": "https://github.com/zeforc/viet-qr/issues"
   },
   "homepage": "https://github.com/zeforc/viet-qr#readme",
+  "files": [
+    "dist",
+    "src/svelte"
+  ],
   "exports": {
     "./styles.css": "./dist/styles.css",
     "./react": {
@@ -35,10 +43,15 @@
       "svelte": "./src/svelte/index.ts",
       "default": "./src/svelte/index.ts"
     },
+    "./elements": {
+      "types": "./dist/elements/index.d.ts",
+      "import": "./dist/elements/index.mjs",
+      "require": "./dist/elements/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsup && vite build",
+    "build": "tsup && vite build && rm -rf dist/vue/elements dist/vue/react dist/vue/svelte dist/vue/vue",
     "dev": "tsup --watch & vite build --watch"
   },
   "peerDependencies": {
@@ -70,14 +83,18 @@
     }
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.2.17",
-    "@viet-qr/core": "workspace:^",
     "@viet-qr/react": "workspace:^",
-    "@vitejs/plugin-vue": "^5.1.0",
-    "react": "^19.2.7",
+    "@vitejs/plugin-vue": "^6.0.7",
     "typescript": "^6.0.3",
-    "vite": "^5.3.4",
-    "vite-plugin-dts": "^4.0.0",
-    "vue": "^3.4.31"
+    "react": "^19.2.7",
+    "vue": "^3.4.31",
+    "vite": "^8.1.3",
+    "vite-plugin-dts": "^5.0.3"
+  },
+  "dependencies": {
+    "@viet-qr/core": "workspace:^",
+    "qrcode": "^1.5.4"
   }
 }

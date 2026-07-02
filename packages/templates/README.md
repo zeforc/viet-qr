@@ -76,6 +76,23 @@ import '@viet-qr/templates/style.css'; // Bắt buộc import CSS
 />
 ```
 
+#### Cho Vanilla JS (Web Components)
+Từ phiên bản `1.2.0`, bạn có thể dùng trực tiếp thư viện trên bất kỳ nền tảng nào thông qua CDN:
+```html
+<!-- Nhúng thư viện và CSS -->
+<script src="https://unpkg.com/@viet-qr/templates/dist/elements/index.global.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@viet-qr/templates/dist/styles.css" />
+
+<!-- Sử dụng thẻ trực tiếp trong HTML -->
+<viet-qr-compact 
+  bank-id="VCB" 
+  account-no="1122334455"
+  account-name="NGUYEN NGOC A"
+  amount="50000"
+  theme="light"
+></viet-qr-compact>
+```
+
 ### 🔹 Mẫu giao diện `PayStandee`
 Một thiết kế mang phong cách biển mica để bàn (standee) dùng tại các quầy thu ngân. Hỗ trợ hiển thị tên cửa hàng nổi bật.
 
@@ -88,6 +105,9 @@ import { PayStandee } from '@viet-qr/templates/vue';
 
 // Nhúng cho Svelte
 import { PayStandee } from '@viet-qr/templates/svelte';
+
+// Nhúng cho Vanilla JS / HTML
+// <viet-qr-standee bank-id="VCB" ...></viet-qr-standee>
 ```
 
 ## API Reference (Props)
@@ -101,6 +121,35 @@ Mọi template đều chấp nhận các thuộc tính kế thừa hoàn toàn t
 | `title`         | `string`            | `"Quét mã để thanh toán"`| Dòng chữ Tiêu đề nổi bật trên cùng (Dành cho `PayStandee`).                   |
 | `subtitle`      | `string`            | `"Hỗ trợ ứng dụng..."` | Dòng chữ mô tả nhỏ bên dưới Tiêu đề (Dành cho `PayStandee`).               |
 | *Khác...*       | *Tương đương*       | *Như cũ* | Kế thừa toàn bộ Props của `<VietQR />` (vd: `bankId`, `accountNo`, `amount`...)        |
+
+## ⚠️ Lưu ý cho người dùng Svelte 4
+
+Bắt đầu từ phiên bản `v1.1.0`, các component Svelte được phân phối giữ nguyên mã nguồn gốc chứa TypeScript (`<script lang="ts">`). Svelte 5 tự động hiểu cú pháp này, nhưng nếu bạn đang dùng **Svelte 4** (hoặc các trình đóng gói cũ), bạn cần cấu hình để trình biên dịch xử lý TypeScript.
+
+**1. Trong Vite (`vite.config.ts`):**
+Loại trừ thư viện khỏi pre-bundling để giao lại cho Svelte compiler:
+```typescript
+import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+  plugins: [svelte()],
+  optimizeDeps: {
+    exclude: ['@viet-qr/svelte', '@viet-qr/templates']
+  }
+});
+```
+
+**2. Bật Preprocess (`svelte.config.js`):**
+```javascript
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+export default {
+  preprocess: vitePreprocess()
+};
+```
+
+*(Lưu ý: Nếu bạn sử dụng Webpack / Rollup, hãy chắc chắn rằng `svelte-loader` hoặc `rollup-plugin-svelte` của bạn đã được cấu hình với `svelte-preprocess` để tự động compile thư mục `node_modules/@viet-qr/*`).*
 
 ## Giấy phép (License)
 MIT

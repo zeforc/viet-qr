@@ -1,9 +1,20 @@
 {
   "name": "@viet-qr/vue",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "license": "MIT",
   "author": "Zeforc",
-  "keywords": ["vietqr", "viet-qr", "napas", "emvco", "qr-code", "qr-payment", "payment", "vietnam-qr", "vue-qr", "vue-vietqr"],
+  "keywords": [
+    "vietqr",
+    "viet-qr",
+    "napas",
+    "emvco",
+    "qr-code",
+    "qr-payment",
+    "payment",
+    "vietnam-qr",
+    "vue-qr",
+    "vue-vietqr"
+  ],
   "description": "Vue wrapper for VietQR",
   "repository": {
     "type": "git",
@@ -24,6 +35,9 @@
     },
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch"
@@ -36,11 +50,11 @@
     "qrcode.vue": "^3.6.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.1.0",
-    "vite": "^5.3.4",
-    "vite-plugin-dts": "^4.0.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "^5.5.3",
+    "vite": "^8.1.3",
+    "vite-plugin-dts": "^5.0.3",
     "vue": "^3.4.31",
-    "vue-tsc": "^2.0.28",
-    "typescript": "^5.5.3"
+    "vue-tsc": "^2.0.28"
   }
 }

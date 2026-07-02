@@ -23,7 +23,7 @@ Kho lưu trữ này chứa các gói (packages) sau:
 | [`@viet-qr/react`](./packages/react) | React Component Wrapper để vẽ mã QR trên React. | [![npm version](https://img.shields.io/npm/v/@viet-qr/react.svg)](https://www.npmjs.com/package/@viet-qr/react) |
 | [`@viet-qr/vue`](./packages/vue) | Vue Component Wrapper dành cho hệ sinh thái Vue 3. | [![npm version](https://img.shields.io/npm/v/@viet-qr/vue.svg)](https://www.npmjs.com/package/@viet-qr/vue) |
 | [`@viet-qr/svelte`](./packages/svelte) | Svelte Component Wrapper tương thích với Svelte 5. | [![npm version](https://img.shields.io/npm/v/@viet-qr/svelte.svg)](https://www.npmjs.com/package/@viet-qr/svelte) |
-| [`@viet-qr/templates`](./packages/templates) | Bộ sưu tập các mẫu UI (Card, Standee) thiết kế sẵn cực đẹp. | [![npm version](https://img.shields.io/npm/v/@viet-qr/templates.svg)](https://www.npmjs.com/package/@viet-qr/templates) |
+| [`@viet-qr/templates`](./packages/templates) | Bộ sưu tập các mẫu UI (Card, Standee) thiết kế sẵn tuyệt đẹp cho React, Vue, Svelte và Vanilla JS. | [![npm version](https://img.shields.io/npm/v/@viet-qr/templates.svg)](https://www.npmjs.com/package/@viet-qr/templates) |
 
 ---
 
@@ -81,7 +81,7 @@ function App() {
 👉 **Đọc chi tiết tại:** [Tài liệu `@viet-qr/react`](./packages/react/README.md)
 
 ### 3. Sử dụng Giao diện làm sẵn (Pre-built Templates)
-Nếu bạn không muốn tự code giao diện thẻ QR, hãy cài gói `templates` và sử dụng `CompactCard` hoặc `PayStandee` siêu đẹp (hỗ trợ cả React, Vue, Svelte).
+Nếu bạn không muốn tự code giao diện thẻ QR, hãy cài gói `templates` và sử dụng `CompactCard` hoặc `PayStandee` siêu đẹp (hỗ trợ cả React, Vue, Svelte và Vanilla JS Web Components).
 
 ```bash
 npm install @viet-qr/templates
@@ -89,6 +89,7 @@ npm install @viet-qr/templates
 
 ```tsx
 import { CompactCard } from '@viet-qr/templates/react'; // hoặc /vue, /svelte
+// Với Vanilla JS, nhúng trực tiếp qua script CDN (xem docs chi tiết)
 import '@viet-qr/templates/style.css';
 
 function App() {

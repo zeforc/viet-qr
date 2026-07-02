@@ -1,805 +1,1093 @@
-import { defineComponent as B, ref as O, computed as b, h as w, onMounted as X, watchEffect as q, Fragment as Z, openBlock as $, createBlock as J, normalizeClass as j } from "vue";
-import { generateVietQR as x } from "@viet-qr/core";
-/*!
- * qrcode.vue v3.10.0
- * A Vue.js component to generate QRCode. Both support Vue 2 and Vue 3
- * © 2017-PRESENT @scopewu(https://github.com/scopewu)
- * MIT License.
- */
-var N = function() {
-  return N = Object.assign || function(d) {
-    for (var s, o = 1, c = arguments.length; o < c; o++) {
-      s = arguments[o];
-      for (var l in s) Object.prototype.hasOwnProperty.call(s, l) && (d[l] = s[l]);
-    }
-    return d;
-  }, N.apply(this, arguments);
-};
-var L;
-(function(i) {
-  var d = (
-    /** @class */
-    function() {
-      function a(e, t, r, n) {
-        if (this.version = e, this.errorCorrectionLevel = t, this.modules = [], this.isFunction = [], e < a.MIN_VERSION || e > a.MAX_VERSION)
-          throw new RangeError("Version value out of range");
-        if (n < -1 || n > 7)
-          throw new RangeError("Mask value out of range");
-        this.size = e * 4 + 17;
-        for (var v = [], u = 0; u < this.size; u++)
-          v.push(!1);
-        for (var u = 0; u < this.size; u++)
-          this.modules.push(v.slice()), this.isFunction.push(v.slice());
-        this.drawFunctionPatterns();
-        var f = this.addEccAndInterleave(r);
-        if (this.drawCodewords(f), n == -1)
-          for (var h = 1e9, u = 0; u < 8; u++) {
-            this.applyMask(u), this.drawFormatBits(u);
-            var m = this.getPenaltyScore();
-            m < h && (n = u, h = m), this.applyMask(u);
-          }
-        c(0 <= n && n <= 7), this.mask = n, this.applyMask(n), this.drawFormatBits(n), this.isFunction = [];
-      }
-      return a.encodeText = function(e, t) {
-        var r = i.QrSegment.makeSegments(e);
-        return a.encodeSegments(r, t);
-      }, a.encodeBinary = function(e, t) {
-        var r = i.QrSegment.makeBytes(e);
-        return a.encodeSegments([r], t);
-      }, a.encodeSegments = function(e, t, r, n, v, u) {
-        if (r === void 0 && (r = 1), n === void 0 && (n = 40), v === void 0 && (v = -1), u === void 0 && (u = !0), !(a.MIN_VERSION <= r && r <= n && n <= a.MAX_VERSION) || v < -1 || v > 7)
-          throw new RangeError("Invalid value");
-        var f, h;
-        for (f = r; ; f++) {
-          var m = a.getNumDataCodewords(f, t) * 8, R = l.getTotalBits(e, f);
-          if (R <= m) {
-            h = R;
-            break;
-          }
-          if (f >= n)
-            throw new RangeError("Data too long");
-        }
-        for (var C = 0, M = [a.Ecc.MEDIUM, a.Ecc.QUARTILE, a.Ecc.HIGH]; C < M.length; C++) {
-          var S = M[C];
-          u && h <= a.getNumDataCodewords(f, S) * 8 && (t = S);
-        }
-        for (var E = [], g = 0, P = e; g < P.length; g++) {
-          var p = P[g];
-          s(p.mode.modeBits, 4, E), s(p.numChars, p.mode.numCharCountBits(f), E);
-          for (var y = 0, A = p.getData(); y < A.length; y++) {
-            var U = A[y];
-            E.push(U);
-          }
-        }
-        c(E.length == h);
-        var I = a.getNumDataCodewords(f, t) * 8;
-        c(E.length <= I), s(0, Math.min(4, I - E.length), E), s(0, (8 - E.length % 8) % 8, E), c(E.length % 8 == 0);
-        for (var z = 236; E.length < I; z ^= 253)
-          s(z, 8, E);
-        for (var _ = []; _.length * 8 < E.length; )
-          _.push(0);
-        return E.forEach(function(F, D) {
-          return _[D >>> 3] |= F << 7 - (D & 7);
-        }), new a(f, t, _, v);
-      }, a.prototype.getModule = function(e, t) {
-        return 0 <= e && e < this.size && 0 <= t && t < this.size && this.modules[t][e];
-      }, a.prototype.getModules = function() {
-        return this.modules;
-      }, a.prototype.drawFunctionPatterns = function() {
-        for (var e = 0; e < this.size; e++)
-          this.setFunctionModule(6, e, e % 2 == 0), this.setFunctionModule(e, 6, e % 2 == 0);
-        this.drawFinderPattern(3, 3), this.drawFinderPattern(this.size - 4, 3), this.drawFinderPattern(3, this.size - 4);
-        for (var t = this.getAlignmentPatternPositions(), r = t.length, e = 0; e < r; e++)
-          for (var n = 0; n < r; n++)
-            e == 0 && n == 0 || e == 0 && n == r - 1 || e == r - 1 && n == 0 || this.drawAlignmentPattern(t[e], t[n]);
-        this.drawFormatBits(0), this.drawVersion();
-      }, a.prototype.drawFormatBits = function(e) {
-        for (var t = this.errorCorrectionLevel.formatBits << 3 | e, r = t, n = 0; n < 10; n++)
-          r = r << 1 ^ (r >>> 9) * 1335;
-        var v = (t << 10 | r) ^ 21522;
-        c(v >>> 15 == 0);
-        for (var n = 0; n <= 5; n++)
-          this.setFunctionModule(8, n, o(v, n));
-        this.setFunctionModule(8, 7, o(v, 6)), this.setFunctionModule(8, 8, o(v, 7)), this.setFunctionModule(7, 8, o(v, 8));
-        for (var n = 9; n < 15; n++)
-          this.setFunctionModule(14 - n, 8, o(v, n));
-        for (var n = 0; n < 8; n++)
-          this.setFunctionModule(this.size - 1 - n, 8, o(v, n));
-        for (var n = 8; n < 15; n++)
-          this.setFunctionModule(8, this.size - 15 + n, o(v, n));
-        this.setFunctionModule(8, this.size - 8, !0);
-      }, a.prototype.drawVersion = function() {
-        if (!(this.version < 7)) {
-          for (var e = this.version, t = 0; t < 12; t++)
-            e = e << 1 ^ (e >>> 11) * 7973;
-          var r = this.version << 12 | e;
-          c(r >>> 18 == 0);
-          for (var t = 0; t < 18; t++) {
-            var n = o(r, t), v = this.size - 11 + t % 3, u = Math.floor(t / 3);
-            this.setFunctionModule(v, u, n), this.setFunctionModule(u, v, n);
-          }
-        }
-      }, a.prototype.drawFinderPattern = function(e, t) {
-        for (var r = -4; r <= 4; r++)
-          for (var n = -4; n <= 4; n++) {
-            var v = Math.max(Math.abs(n), Math.abs(r)), u = e + n, f = t + r;
-            0 <= u && u < this.size && 0 <= f && f < this.size && this.setFunctionModule(u, f, v != 2 && v != 4);
-          }
-      }, a.prototype.drawAlignmentPattern = function(e, t) {
-        for (var r = -2; r <= 2; r++)
-          for (var n = -2; n <= 2; n++)
-            this.setFunctionModule(e + n, t + r, Math.max(Math.abs(n), Math.abs(r)) != 1);
-      }, a.prototype.setFunctionModule = function(e, t, r) {
-        this.modules[t][e] = r, this.isFunction[t][e] = !0;
-      }, a.prototype.addEccAndInterleave = function(e) {
-        var t = this.version, r = this.errorCorrectionLevel;
-        if (e.length != a.getNumDataCodewords(t, r))
-          throw new RangeError("Invalid argument");
-        for (var n = a.NUM_ERROR_CORRECTION_BLOCKS[r.ordinal][t], v = a.ECC_CODEWORDS_PER_BLOCK[r.ordinal][t], u = Math.floor(a.getNumRawDataModules(t) / 8), f = n - u % n, h = Math.floor(u / n), m = [], R = a.reedSolomonComputeDivisor(v), C = 0, M = 0; C < n; C++) {
-          var S = e.slice(M, M + h - v + (C < f ? 0 : 1));
-          M += S.length;
-          var E = a.reedSolomonComputeRemainder(S, R);
-          C < f && S.push(0), m.push(S.concat(E));
-        }
-        for (var g = [], P = function(p) {
-          m.forEach(function(y, A) {
-            (p != h - v || A >= f) && g.push(y[p]);
-          });
-        }, C = 0; C < m[0].length; C++)
-          P(C);
-        return c(g.length == u), g;
-      }, a.prototype.drawCodewords = function(e) {
-        if (e.length != Math.floor(a.getNumRawDataModules(this.version) / 8))
-          throw new RangeError("Invalid argument");
-        for (var t = 0, r = this.size - 1; r >= 1; r -= 2) {
-          r == 6 && (r = 5);
-          for (var n = 0; n < this.size; n++)
-            for (var v = 0; v < 2; v++) {
-              var u = r - v, f = (r + 1 & 2) == 0, h = f ? this.size - 1 - n : n;
-              !this.isFunction[h][u] && t < e.length * 8 && (this.modules[h][u] = o(e[t >>> 3], 7 - (t & 7)), t++);
-            }
-        }
-        c(t == e.length * 8);
-      }, a.prototype.applyMask = function(e) {
-        if (e < 0 || e > 7)
-          throw new RangeError("Mask value out of range");
-        for (var t = 0; t < this.size; t++)
-          for (var r = 0; r < this.size; r++) {
-            var n = void 0;
-            switch (e) {
-              case 0:
-                n = (r + t) % 2 == 0;
-                break;
-              case 1:
-                n = t % 2 == 0;
-                break;
-              case 2:
-                n = r % 3 == 0;
-                break;
-              case 3:
-                n = (r + t) % 3 == 0;
-                break;
-              case 4:
-                n = (Math.floor(r / 3) + Math.floor(t / 2)) % 2 == 0;
-                break;
-              case 5:
-                n = r * t % 2 + r * t % 3 == 0;
-                break;
-              case 6:
-                n = (r * t % 2 + r * t % 3) % 2 == 0;
-                break;
-              case 7:
-                n = ((r + t) % 2 + r * t % 3) % 2 == 0;
-                break;
-              default:
-                throw new Error("Unreachable");
-            }
-            !this.isFunction[t][r] && n && (this.modules[t][r] = !this.modules[t][r]);
-          }
-      }, a.prototype.getPenaltyScore = function() {
-        for (var e = 0, t = 0; t < this.size; t++) {
-          for (var r = !1, n = 0, v = [0, 0, 0, 0, 0, 0, 0], u = 0; u < this.size; u++)
-            this.modules[t][u] == r ? (n++, n == 5 ? e += a.PENALTY_N1 : n > 5 && e++) : (this.finderPenaltyAddHistory(n, v), r || (e += this.finderPenaltyCountPatterns(v) * a.PENALTY_N3), r = this.modules[t][u], n = 1);
-          e += this.finderPenaltyTerminateAndCount(r, n, v) * a.PENALTY_N3;
-        }
-        for (var u = 0; u < this.size; u++) {
-          for (var r = !1, f = 0, v = [0, 0, 0, 0, 0, 0, 0], t = 0; t < this.size; t++)
-            this.modules[t][u] == r ? (f++, f == 5 ? e += a.PENALTY_N1 : f > 5 && e++) : (this.finderPenaltyAddHistory(f, v), r || (e += this.finderPenaltyCountPatterns(v) * a.PENALTY_N3), r = this.modules[t][u], f = 1);
-          e += this.finderPenaltyTerminateAndCount(r, f, v) * a.PENALTY_N3;
-        }
-        for (var t = 0; t < this.size - 1; t++)
-          for (var u = 0; u < this.size - 1; u++) {
-            var h = this.modules[t][u];
-            h == this.modules[t][u + 1] && h == this.modules[t + 1][u] && h == this.modules[t + 1][u + 1] && (e += a.PENALTY_N2);
-          }
-        for (var m = 0, R = 0, C = this.modules; R < C.length; R++) {
-          var M = C[R];
-          m = M.reduce(function(g, P) {
-            return g + (P ? 1 : 0);
-          }, m);
-        }
-        var S = this.size * this.size, E = Math.ceil(Math.abs(m * 20 - S * 10) / S) - 1;
-        return c(0 <= E && E <= 9), e += E * a.PENALTY_N4, c(0 <= e && e <= 2568888), e;
-      }, a.prototype.getAlignmentPatternPositions = function() {
-        if (this.version == 1)
-          return [];
-        for (var e = Math.floor(this.version / 7) + 2, t = Math.floor((this.version * 8 + e * 3 + 5) / (e * 4 - 4)) * 2, r = [6], n = this.size - 7; r.length < e; n -= t)
-          r.splice(1, 0, n);
-        return r;
-      }, a.getNumRawDataModules = function(e) {
-        if (e < a.MIN_VERSION || e > a.MAX_VERSION)
-          throw new RangeError("Version number out of range");
-        var t = (16 * e + 128) * e + 64;
-        if (e >= 2) {
-          var r = Math.floor(e / 7) + 2;
-          t -= (25 * r - 10) * r - 55, e >= 7 && (t -= 36);
-        }
-        return c(208 <= t && t <= 29648), t;
-      }, a.getNumDataCodewords = function(e, t) {
-        return Math.floor(a.getNumRawDataModules(e) / 8) - a.ECC_CODEWORDS_PER_BLOCK[t.ordinal][e] * a.NUM_ERROR_CORRECTION_BLOCKS[t.ordinal][e];
-      }, a.reedSolomonComputeDivisor = function(e) {
-        if (e < 1 || e > 255)
-          throw new RangeError("Degree out of range");
-        for (var t = [], r = 0; r < e - 1; r++)
-          t.push(0);
-        t.push(1);
-        for (var n = 1, r = 0; r < e; r++) {
-          for (var v = 0; v < t.length; v++)
-            t[v] = a.reedSolomonMultiply(t[v], n), v + 1 < t.length && (t[v] ^= t[v + 1]);
-          n = a.reedSolomonMultiply(n, 2);
-        }
-        return t;
-      }, a.reedSolomonComputeRemainder = function(e, t) {
-        for (var r = t.map(function(h) {
-          return 0;
-        }), n = function(h) {
-          var m = h ^ r.shift();
-          r.push(0), t.forEach(function(R, C) {
-            return r[C] ^= a.reedSolomonMultiply(R, m);
-          });
-        }, v = 0, u = e; v < u.length; v++) {
-          var f = u[v];
-          n(f);
-        }
-        return r;
-      }, a.reedSolomonMultiply = function(e, t) {
-        if (e >>> 8 || t >>> 8)
-          throw new RangeError("Byte out of range");
-        for (var r = 0, n = 7; n >= 0; n--)
-          r = r << 1 ^ (r >>> 7) * 285, r ^= (t >>> n & 1) * e;
-        return c(r >>> 8 == 0), r;
-      }, a.prototype.finderPenaltyCountPatterns = function(e) {
-        var t = e[1];
-        c(t <= this.size * 3);
-        var r = t > 0 && e[2] == t && e[3] == t * 3 && e[4] == t && e[5] == t;
-        return (r && e[0] >= t * 4 && e[6] >= t ? 1 : 0) + (r && e[6] >= t * 4 && e[0] >= t ? 1 : 0);
-      }, a.prototype.finderPenaltyTerminateAndCount = function(e, t, r) {
-        return e && (this.finderPenaltyAddHistory(t, r), t = 0), t += this.size, this.finderPenaltyAddHistory(t, r), this.finderPenaltyCountPatterns(r);
-      }, a.prototype.finderPenaltyAddHistory = function(e, t) {
-        t[0] == 0 && (e += this.size), t.pop(), t.unshift(e);
-      }, a.MIN_VERSION = 1, a.MAX_VERSION = 40, a.PENALTY_N1 = 3, a.PENALTY_N2 = 3, a.PENALTY_N3 = 40, a.PENALTY_N4 = 10, a.ECC_CODEWORDS_PER_BLOCK = [
-        // Version: (note that index 0 is for padding, and is set to an illegal value)
-        //0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40    Error correction level
-        [-1, 7, 10, 15, 20, 26, 18, 20, 24, 30, 18, 20, 24, 26, 30, 22, 24, 28, 30, 28, 28, 28, 28, 30, 30, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
-        // Low
-        [-1, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26, 30, 22, 22, 24, 24, 28, 28, 26, 26, 26, 26, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28],
-        // Medium
-        [-1, 13, 22, 18, 26, 18, 24, 18, 22, 20, 24, 28, 26, 24, 20, 30, 24, 28, 28, 26, 30, 28, 30, 30, 30, 30, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30],
-        // Quartile
-        [-1, 17, 28, 22, 16, 22, 28, 26, 26, 24, 28, 24, 28, 22, 24, 24, 30, 28, 28, 26, 28, 30, 24, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]
-        // High
-      ], a.NUM_ERROR_CORRECTION_BLOCKS = [
-        // Version: (note that index 0 is for padding, and is set to an illegal value)
-        //0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40    Error correction level
-        [-1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4, 4, 4, 6, 6, 6, 6, 7, 8, 8, 9, 9, 10, 12, 12, 12, 13, 14, 15, 16, 17, 18, 19, 19, 20, 21, 22, 24, 25],
-        // Low
-        [-1, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5, 5, 8, 9, 9, 10, 10, 11, 13, 14, 16, 17, 17, 18, 20, 21, 23, 25, 26, 28, 29, 31, 33, 35, 37, 38, 40, 43, 45, 47, 49],
-        // Medium
-        [-1, 1, 1, 2, 2, 4, 4, 6, 6, 8, 8, 8, 10, 12, 16, 12, 17, 16, 18, 21, 20, 23, 23, 25, 27, 29, 34, 34, 35, 38, 40, 43, 45, 48, 51, 53, 56, 59, 62, 65, 68],
-        // Quartile
-        [-1, 1, 1, 2, 4, 4, 4, 5, 6, 8, 8, 11, 11, 16, 16, 18, 16, 19, 21, 25, 25, 25, 34, 30, 32, 35, 37, 40, 42, 45, 48, 51, 54, 57, 60, 63, 66, 70, 74, 77, 81]
-        // High
-      ], a;
-    }()
-  );
-  i.QrCode = d;
-  function s(a, e, t) {
-    if (e < 0 || e > 31 || a >>> e)
-      throw new RangeError("Value out of range");
-    for (var r = e - 1; r >= 0; r--)
-      t.push(a >>> r & 1);
-  }
-  function o(a, e) {
-    return (a >>> e & 1) != 0;
-  }
-  function c(a) {
-    if (!a)
-      throw new Error("Assertion error");
-  }
-  var l = (
-    /** @class */
-    function() {
-      function a(e, t, r) {
-        if (this.mode = e, this.numChars = t, this.bitData = r, t < 0)
-          throw new RangeError("Invalid argument");
-        this.bitData = r.slice();
-      }
-      return a.makeBytes = function(e) {
-        for (var t = [], r = 0, n = e; r < n.length; r++) {
-          var v = n[r];
-          s(v, 8, t);
-        }
-        return new a(a.Mode.BYTE, e.length, t);
-      }, a.makeNumeric = function(e) {
-        if (!a.isNumeric(e))
-          throw new RangeError("String contains non-numeric characters");
-        for (var t = [], r = 0; r < e.length; ) {
-          var n = Math.min(e.length - r, 3);
-          s(parseInt(e.substring(r, r + n), 10), n * 3 + 1, t), r += n;
-        }
-        return new a(a.Mode.NUMERIC, e.length, t);
-      }, a.makeAlphanumeric = function(e) {
-        if (!a.isAlphanumeric(e))
-          throw new RangeError("String contains unencodable characters in alphanumeric mode");
-        var t = [], r;
-        for (r = 0; r + 2 <= e.length; r += 2) {
-          var n = a.ALPHANUMERIC_CHARSET.indexOf(e.charAt(r)) * 45;
-          n += a.ALPHANUMERIC_CHARSET.indexOf(e.charAt(r + 1)), s(n, 11, t);
-        }
-        return r < e.length && s(a.ALPHANUMERIC_CHARSET.indexOf(e.charAt(r)), 6, t), new a(a.Mode.ALPHANUMERIC, e.length, t);
-      }, a.makeSegments = function(e) {
-        return e == "" ? [] : a.isNumeric(e) ? [a.makeNumeric(e)] : a.isAlphanumeric(e) ? [a.makeAlphanumeric(e)] : [a.makeBytes(a.toUtf8ByteArray(e))];
-      }, a.makeEci = function(e) {
-        var t = [];
-        if (e < 0)
-          throw new RangeError("ECI assignment value out of range");
-        if (e < 128)
-          s(e, 8, t);
-        else if (e < 16384)
-          s(2, 2, t), s(e, 14, t);
-        else if (e < 1e6)
-          s(6, 3, t), s(e, 21, t);
-        else
-          throw new RangeError("ECI assignment value out of range");
-        return new a(a.Mode.ECI, 0, t);
-      }, a.isNumeric = function(e) {
-        return a.NUMERIC_REGEX.test(e);
-      }, a.isAlphanumeric = function(e) {
-        return a.ALPHANUMERIC_REGEX.test(e);
-      }, a.prototype.getData = function() {
-        return this.bitData.slice();
-      }, a.getTotalBits = function(e, t) {
-        for (var r = 0, n = 0, v = e; n < v.length; n++) {
-          var u = v[n], f = u.mode.numCharCountBits(t);
-          if (u.numChars >= 1 << f)
-            return 1 / 0;
-          r += 4 + f + u.bitData.length;
-        }
-        return r;
-      }, a.toUtf8ByteArray = function(e) {
-        e = encodeURI(e);
-        for (var t = [], r = 0; r < e.length; r++)
-          e.charAt(r) != "%" ? t.push(e.charCodeAt(r)) : (t.push(parseInt(e.substring(r + 1, r + 3), 16)), r += 2);
-        return t;
-      }, a.NUMERIC_REGEX = /^[0-9]*$/, a.ALPHANUMERIC_REGEX = /^[A-Z0-9 $%*+.\/:-]*$/, a.ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:", a;
-    }()
-  );
-  i.QrSegment = l;
-})(L || (L = {}));
-(function(i) {
-  (function(d) {
-    var s = (
-      /** @class */
-      function() {
-        function o(c, l) {
-          this.ordinal = c, this.formatBits = l;
-        }
-        return o.LOW = new o(0, 1), o.MEDIUM = new o(1, 0), o.QUARTILE = new o(2, 3), o.HIGH = new o(3, 2), o;
-      }()
-    );
-    d.Ecc = s;
-  })(i.QrCode || (i.QrCode = {}));
-})(L || (L = {}));
-(function(i) {
-  (function(d) {
-    var s = (
-      /** @class */
-      function() {
-        function o(c, l) {
-          this.modeBits = c, this.numBitsCharCount = l;
-        }
-        return o.prototype.numCharCountBits = function(c) {
-          return this.numBitsCharCount[Math.floor((c + 7) / 17)];
-        }, o.NUMERIC = new o(1, [10, 12, 14]), o.ALPHANUMERIC = new o(2, [9, 11, 13]), o.BYTE = new o(4, [8, 16, 16]), o.KANJI = new o(8, [8, 10, 12]), o.ECI = new o(7, [0, 0, 0]), o;
-      }()
-    );
-    d.Mode = s;
-  })(i.QrSegment || (i.QrSegment = {}));
-})(L || (L = {}));
-var T = L, ee = 0;
-function te(i) {
-  return i || "v-".concat(ee++);
+import { Fragment as e, computed as t, createBlock as n, defineComponent as r, h as i, normalizeClass as a, onMounted as o, openBlock as s, ref as c, watchEffect as l } from "vue";
+import { generateVietQR as u } from "@viet-qr/core";
+//#region ../../node_modules/.pnpm/qrcode.vue@3.10.0_vue@3.5.39_typescript@5.9.3_/node_modules/qrcode.vue/dist/qrcode.vue.esm.js
+var d = function() {
+	return d = Object.assign || function(e) {
+		for (var t, n = 1, r = arguments.length; n < r; n++) for (var i in t = arguments[n], t) Object.prototype.hasOwnProperty.call(t, i) && (e[i] = t[i]);
+		return e;
+	}, d.apply(this, arguments);
+}, f;
+(function(e) {
+	e.QrCode = function() {
+		function a(e, t, n, i) {
+			if (this.version = e, this.errorCorrectionLevel = t, this.modules = [], this.isFunction = [], e < a.MIN_VERSION || e > a.MAX_VERSION) throw RangeError("Version value out of range");
+			if (i < -1 || i > 7) throw RangeError("Mask value out of range");
+			this.size = e * 4 + 17;
+			for (var o = [], s = 0; s < this.size; s++) o.push(!1);
+			for (var s = 0; s < this.size; s++) this.modules.push(o.slice()), this.isFunction.push(o.slice());
+			this.drawFunctionPatterns();
+			var c = this.addEccAndInterleave(n);
+			if (this.drawCodewords(c), i == -1) for (var l = 1e9, s = 0; s < 8; s++) {
+				this.applyMask(s), this.drawFormatBits(s);
+				var u = this.getPenaltyScore();
+				u < l && (i = s, l = u), this.applyMask(s);
+			}
+			r(0 <= i && i <= 7), this.mask = i, this.applyMask(i), this.drawFormatBits(i), this.isFunction = [];
+		}
+		return a.encodeText = function(t, n) {
+			var r = e.QrSegment.makeSegments(t);
+			return a.encodeSegments(r, n);
+		}, a.encodeBinary = function(t, n) {
+			var r = e.QrSegment.makeBytes(t);
+			return a.encodeSegments([r], n);
+		}, a.encodeSegments = function(e, n, o, s, c, l) {
+			if (o === void 0 && (o = 1), s === void 0 && (s = 40), c === void 0 && (c = -1), l === void 0 && (l = !0), !(a.MIN_VERSION <= o && o <= s && s <= a.MAX_VERSION) || c < -1 || c > 7) throw RangeError("Invalid value");
+			var u, d;
+			for (u = o;; u++) {
+				var f = a.getNumDataCodewords(u, n) * 8, p = i.getTotalBits(e, u);
+				if (p <= f) {
+					d = p;
+					break;
+				}
+				if (u >= s) throw RangeError("Data too long");
+			}
+			for (var m = 0, h = [
+				a.Ecc.MEDIUM,
+				a.Ecc.QUARTILE,
+				a.Ecc.HIGH
+			]; m < h.length; m++) {
+				var g = h[m];
+				l && d <= a.getNumDataCodewords(u, g) * 8 && (n = g);
+			}
+			for (var _ = [], v = 0, y = e; v < y.length; v++) {
+				var b = y[v];
+				t(b.mode.modeBits, 4, _), t(b.numChars, b.mode.numCharCountBits(u), _);
+				for (var x = 0, S = b.getData(); x < S.length; x++) {
+					var C = S[x];
+					_.push(C);
+				}
+			}
+			r(_.length == d);
+			var w = a.getNumDataCodewords(u, n) * 8;
+			r(_.length <= w), t(0, Math.min(4, w - _.length), _), t(0, (8 - _.length % 8) % 8, _), r(_.length % 8 == 0);
+			for (var T = 236; _.length < w; T ^= 253) t(T, 8, _);
+			for (var E = []; E.length * 8 < _.length;) E.push(0);
+			return _.forEach(function(e, t) {
+				return E[t >>> 3] |= e << 7 - (t & 7);
+			}), new a(u, n, E, c);
+		}, a.prototype.getModule = function(e, t) {
+			return 0 <= e && e < this.size && 0 <= t && t < this.size && this.modules[t][e];
+		}, a.prototype.getModules = function() {
+			return this.modules;
+		}, a.prototype.drawFunctionPatterns = function() {
+			for (var e = 0; e < this.size; e++) this.setFunctionModule(6, e, e % 2 == 0), this.setFunctionModule(e, 6, e % 2 == 0);
+			this.drawFinderPattern(3, 3), this.drawFinderPattern(this.size - 4, 3), this.drawFinderPattern(3, this.size - 4);
+			for (var t = this.getAlignmentPatternPositions(), n = t.length, e = 0; e < n; e++) for (var r = 0; r < n; r++) e == 0 && r == 0 || e == 0 && r == n - 1 || e == n - 1 && r == 0 || this.drawAlignmentPattern(t[e], t[r]);
+			this.drawFormatBits(0), this.drawVersion();
+		}, a.prototype.drawFormatBits = function(e) {
+			for (var t = this.errorCorrectionLevel.formatBits << 3 | e, i = t, a = 0; a < 10; a++) i = i << 1 ^ (i >>> 9) * 1335;
+			var o = (t << 10 | i) ^ 21522;
+			r(o >>> 15 == 0);
+			for (var a = 0; a <= 5; a++) this.setFunctionModule(8, a, n(o, a));
+			this.setFunctionModule(8, 7, n(o, 6)), this.setFunctionModule(8, 8, n(o, 7)), this.setFunctionModule(7, 8, n(o, 8));
+			for (var a = 9; a < 15; a++) this.setFunctionModule(14 - a, 8, n(o, a));
+			for (var a = 0; a < 8; a++) this.setFunctionModule(this.size - 1 - a, 8, n(o, a));
+			for (var a = 8; a < 15; a++) this.setFunctionModule(8, this.size - 15 + a, n(o, a));
+			this.setFunctionModule(8, this.size - 8, !0);
+		}, a.prototype.drawVersion = function() {
+			if (!(this.version < 7)) {
+				for (var e = this.version, t = 0; t < 12; t++) e = e << 1 ^ (e >>> 11) * 7973;
+				var i = this.version << 12 | e;
+				r(i >>> 18 == 0);
+				for (var t = 0; t < 18; t++) {
+					var a = n(i, t), o = this.size - 11 + t % 3, s = Math.floor(t / 3);
+					this.setFunctionModule(o, s, a), this.setFunctionModule(s, o, a);
+				}
+			}
+		}, a.prototype.drawFinderPattern = function(e, t) {
+			for (var n = -4; n <= 4; n++) for (var r = -4; r <= 4; r++) {
+				var i = Math.max(Math.abs(r), Math.abs(n)), a = e + r, o = t + n;
+				0 <= a && a < this.size && 0 <= o && o < this.size && this.setFunctionModule(a, o, i != 2 && i != 4);
+			}
+		}, a.prototype.drawAlignmentPattern = function(e, t) {
+			for (var n = -2; n <= 2; n++) for (var r = -2; r <= 2; r++) this.setFunctionModule(e + r, t + n, Math.max(Math.abs(r), Math.abs(n)) != 1);
+		}, a.prototype.setFunctionModule = function(e, t, n) {
+			this.modules[t][e] = n, this.isFunction[t][e] = !0;
+		}, a.prototype.addEccAndInterleave = function(e) {
+			var t = this.version, n = this.errorCorrectionLevel;
+			if (e.length != a.getNumDataCodewords(t, n)) throw RangeError("Invalid argument");
+			for (var i = a.NUM_ERROR_CORRECTION_BLOCKS[n.ordinal][t], o = a.ECC_CODEWORDS_PER_BLOCK[n.ordinal][t], s = Math.floor(a.getNumRawDataModules(t) / 8), c = i - s % i, l = Math.floor(s / i), u = [], d = a.reedSolomonComputeDivisor(o), f = 0, p = 0; f < i; f++) {
+				var m = e.slice(p, p + l - o + (f < c ? 0 : 1));
+				p += m.length;
+				var h = a.reedSolomonComputeRemainder(m, d);
+				f < c && m.push(0), u.push(m.concat(h));
+			}
+			for (var g = [], _ = function(e) {
+				u.forEach(function(t, n) {
+					(e != l - o || n >= c) && g.push(t[e]);
+				});
+			}, f = 0; f < u[0].length; f++) _(f);
+			return r(g.length == s), g;
+		}, a.prototype.drawCodewords = function(e) {
+			if (e.length != Math.floor(a.getNumRawDataModules(this.version) / 8)) throw RangeError("Invalid argument");
+			for (var t = 0, i = this.size - 1; i >= 1; i -= 2) {
+				i == 6 && (i = 5);
+				for (var o = 0; o < this.size; o++) for (var s = 0; s < 2; s++) {
+					var c = i - s, l = i + 1 & 2 ? o : this.size - 1 - o;
+					!this.isFunction[l][c] && t < e.length * 8 && (this.modules[l][c] = n(e[t >>> 3], 7 - (t & 7)), t++);
+				}
+			}
+			r(t == e.length * 8);
+		}, a.prototype.applyMask = function(e) {
+			if (e < 0 || e > 7) throw RangeError("Mask value out of range");
+			for (var t = 0; t < this.size; t++) for (var n = 0; n < this.size; n++) {
+				var r = void 0;
+				switch (e) {
+					case 0:
+						r = (n + t) % 2 == 0;
+						break;
+					case 1:
+						r = t % 2 == 0;
+						break;
+					case 2:
+						r = n % 3 == 0;
+						break;
+					case 3:
+						r = (n + t) % 3 == 0;
+						break;
+					case 4:
+						r = (Math.floor(n / 3) + Math.floor(t / 2)) % 2 == 0;
+						break;
+					case 5:
+						r = n * t % 2 + n * t % 3 == 0;
+						break;
+					case 6:
+						r = (n * t % 2 + n * t % 3) % 2 == 0;
+						break;
+					case 7:
+						r = ((n + t) % 2 + n * t % 3) % 2 == 0;
+						break;
+					default: throw Error("Unreachable");
+				}
+				!this.isFunction[t][n] && r && (this.modules[t][n] = !this.modules[t][n]);
+			}
+		}, a.prototype.getPenaltyScore = function() {
+			for (var e = 0, t = 0; t < this.size; t++) {
+				for (var n = !1, i = 0, o = [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				], s = 0; s < this.size; s++) this.modules[t][s] == n ? (i++, i == 5 ? e += a.PENALTY_N1 : i > 5 && e++) : (this.finderPenaltyAddHistory(i, o), n || (e += this.finderPenaltyCountPatterns(o) * a.PENALTY_N3), n = this.modules[t][s], i = 1);
+				e += this.finderPenaltyTerminateAndCount(n, i, o) * a.PENALTY_N3;
+			}
+			for (var s = 0; s < this.size; s++) {
+				for (var n = !1, c = 0, o = [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				], t = 0; t < this.size; t++) this.modules[t][s] == n ? (c++, c == 5 ? e += a.PENALTY_N1 : c > 5 && e++) : (this.finderPenaltyAddHistory(c, o), n || (e += this.finderPenaltyCountPatterns(o) * a.PENALTY_N3), n = this.modules[t][s], c = 1);
+				e += this.finderPenaltyTerminateAndCount(n, c, o) * a.PENALTY_N3;
+			}
+			for (var t = 0; t < this.size - 1; t++) for (var s = 0; s < this.size - 1; s++) {
+				var l = this.modules[t][s];
+				l == this.modules[t][s + 1] && l == this.modules[t + 1][s] && l == this.modules[t + 1][s + 1] && (e += a.PENALTY_N2);
+			}
+			for (var u = 0, d = 0, f = this.modules; d < f.length; d++) u = f[d].reduce(function(e, t) {
+				return e + +!!t;
+			}, u);
+			var p = this.size * this.size, m = Math.ceil(Math.abs(u * 20 - p * 10) / p) - 1;
+			return r(0 <= m && m <= 9), e += m * a.PENALTY_N4, r(0 <= e && e <= 2568888), e;
+		}, a.prototype.getAlignmentPatternPositions = function() {
+			if (this.version == 1) return [];
+			for (var e = Math.floor(this.version / 7) + 2, t = Math.floor((this.version * 8 + e * 3 + 5) / (e * 4 - 4)) * 2, n = [6], r = this.size - 7; n.length < e; r -= t) n.splice(1, 0, r);
+			return n;
+		}, a.getNumRawDataModules = function(e) {
+			if (e < a.MIN_VERSION || e > a.MAX_VERSION) throw RangeError("Version number out of range");
+			var t = (16 * e + 128) * e + 64;
+			if (e >= 2) {
+				var n = Math.floor(e / 7) + 2;
+				t -= (25 * n - 10) * n - 55, e >= 7 && (t -= 36);
+			}
+			return r(208 <= t && t <= 29648), t;
+		}, a.getNumDataCodewords = function(e, t) {
+			return Math.floor(a.getNumRawDataModules(e) / 8) - a.ECC_CODEWORDS_PER_BLOCK[t.ordinal][e] * a.NUM_ERROR_CORRECTION_BLOCKS[t.ordinal][e];
+		}, a.reedSolomonComputeDivisor = function(e) {
+			if (e < 1 || e > 255) throw RangeError("Degree out of range");
+			for (var t = [], n = 0; n < e - 1; n++) t.push(0);
+			t.push(1);
+			for (var r = 1, n = 0; n < e; n++) {
+				for (var i = 0; i < t.length; i++) t[i] = a.reedSolomonMultiply(t[i], r), i + 1 < t.length && (t[i] ^= t[i + 1]);
+				r = a.reedSolomonMultiply(r, 2);
+			}
+			return t;
+		}, a.reedSolomonComputeRemainder = function(e, t) {
+			for (var n = t.map(function(e) {
+				return 0;
+			}), r = function(e) {
+				var r = e ^ n.shift();
+				n.push(0), t.forEach(function(e, t) {
+					return n[t] ^= a.reedSolomonMultiply(e, r);
+				});
+			}, i = 0, o = e; i < o.length; i++) {
+				var s = o[i];
+				r(s);
+			}
+			return n;
+		}, a.reedSolomonMultiply = function(e, t) {
+			if (e >>> 8 || t >>> 8) throw RangeError("Byte out of range");
+			for (var n = 0, i = 7; i >= 0; i--) n = n << 1 ^ (n >>> 7) * 285, n ^= (t >>> i & 1) * e;
+			return r(n >>> 8 == 0), n;
+		}, a.prototype.finderPenaltyCountPatterns = function(e) {
+			var t = e[1];
+			r(t <= this.size * 3);
+			var n = t > 0 && e[2] == t && e[3] == t * 3 && e[4] == t && e[5] == t;
+			return (n && e[0] >= t * 4 && e[6] >= t ? 1 : 0) + (n && e[6] >= t * 4 && e[0] >= t ? 1 : 0);
+		}, a.prototype.finderPenaltyTerminateAndCount = function(e, t, n) {
+			return e && (this.finderPenaltyAddHistory(t, n), t = 0), t += this.size, this.finderPenaltyAddHistory(t, n), this.finderPenaltyCountPatterns(n);
+		}, a.prototype.finderPenaltyAddHistory = function(e, t) {
+			t[0] == 0 && (e += this.size), t.pop(), t.unshift(e);
+		}, a.MIN_VERSION = 1, a.MAX_VERSION = 40, a.PENALTY_N1 = 3, a.PENALTY_N2 = 3, a.PENALTY_N3 = 40, a.PENALTY_N4 = 10, a.ECC_CODEWORDS_PER_BLOCK = [
+			[
+				-1,
+				7,
+				10,
+				15,
+				20,
+				26,
+				18,
+				20,
+				24,
+				30,
+				18,
+				20,
+				24,
+				26,
+				30,
+				22,
+				24,
+				28,
+				30,
+				28,
+				28,
+				28,
+				28,
+				30,
+				30,
+				26,
+				28,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30
+			],
+			[
+				-1,
+				10,
+				16,
+				26,
+				18,
+				24,
+				16,
+				18,
+				22,
+				22,
+				26,
+				30,
+				22,
+				22,
+				24,
+				24,
+				28,
+				28,
+				26,
+				26,
+				26,
+				26,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28,
+				28
+			],
+			[
+				-1,
+				13,
+				22,
+				18,
+				26,
+				18,
+				24,
+				18,
+				22,
+				20,
+				24,
+				28,
+				26,
+				24,
+				20,
+				30,
+				24,
+				28,
+				28,
+				26,
+				30,
+				28,
+				30,
+				30,
+				30,
+				30,
+				28,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30
+			],
+			[
+				-1,
+				17,
+				28,
+				22,
+				16,
+				22,
+				28,
+				26,
+				26,
+				24,
+				28,
+				24,
+				28,
+				22,
+				24,
+				24,
+				30,
+				28,
+				28,
+				26,
+				28,
+				30,
+				24,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30,
+				30
+			]
+		], a.NUM_ERROR_CORRECTION_BLOCKS = [
+			[
+				-1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				2,
+				2,
+				2,
+				2,
+				4,
+				4,
+				4,
+				4,
+				4,
+				6,
+				6,
+				6,
+				6,
+				7,
+				8,
+				8,
+				9,
+				9,
+				10,
+				12,
+				12,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				19,
+				20,
+				21,
+				22,
+				24,
+				25
+			],
+			[
+				-1,
+				1,
+				1,
+				1,
+				2,
+				2,
+				4,
+				4,
+				4,
+				5,
+				5,
+				5,
+				8,
+				9,
+				9,
+				10,
+				10,
+				11,
+				13,
+				14,
+				16,
+				17,
+				17,
+				18,
+				20,
+				21,
+				23,
+				25,
+				26,
+				28,
+				29,
+				31,
+				33,
+				35,
+				37,
+				38,
+				40,
+				43,
+				45,
+				47,
+				49
+			],
+			[
+				-1,
+				1,
+				1,
+				2,
+				2,
+				4,
+				4,
+				6,
+				6,
+				8,
+				8,
+				8,
+				10,
+				12,
+				16,
+				12,
+				17,
+				16,
+				18,
+				21,
+				20,
+				23,
+				23,
+				25,
+				27,
+				29,
+				34,
+				34,
+				35,
+				38,
+				40,
+				43,
+				45,
+				48,
+				51,
+				53,
+				56,
+				59,
+				62,
+				65,
+				68
+			],
+			[
+				-1,
+				1,
+				1,
+				2,
+				4,
+				4,
+				4,
+				5,
+				6,
+				8,
+				8,
+				11,
+				11,
+				16,
+				16,
+				18,
+				16,
+				19,
+				21,
+				25,
+				25,
+				25,
+				34,
+				30,
+				32,
+				35,
+				37,
+				40,
+				42,
+				45,
+				48,
+				51,
+				54,
+				57,
+				60,
+				63,
+				66,
+				70,
+				74,
+				77,
+				81
+			]
+		], a;
+	}();
+	function t(e, t, n) {
+		if (t < 0 || t > 31 || e >>> t) throw RangeError("Value out of range");
+		for (var r = t - 1; r >= 0; r--) n.push(e >>> r & 1);
+	}
+	function n(e, t) {
+		return (e >>> t & 1) != 0;
+	}
+	function r(e) {
+		if (!e) throw Error("Assertion error");
+	}
+	var i = function() {
+		function e(e, t, n) {
+			if (this.mode = e, this.numChars = t, this.bitData = n, t < 0) throw RangeError("Invalid argument");
+			this.bitData = n.slice();
+		}
+		return e.makeBytes = function(n) {
+			for (var r = [], i = 0, a = n; i < a.length; i++) {
+				var o = a[i];
+				t(o, 8, r);
+			}
+			return new e(e.Mode.BYTE, n.length, r);
+		}, e.makeNumeric = function(n) {
+			if (!e.isNumeric(n)) throw RangeError("String contains non-numeric characters");
+			for (var r = [], i = 0; i < n.length;) {
+				var a = Math.min(n.length - i, 3);
+				t(parseInt(n.substring(i, i + a), 10), a * 3 + 1, r), i += a;
+			}
+			return new e(e.Mode.NUMERIC, n.length, r);
+		}, e.makeAlphanumeric = function(n) {
+			if (!e.isAlphanumeric(n)) throw RangeError("String contains unencodable characters in alphanumeric mode");
+			var r = [], i;
+			for (i = 0; i + 2 <= n.length; i += 2) {
+				var a = e.ALPHANUMERIC_CHARSET.indexOf(n.charAt(i)) * 45;
+				a += e.ALPHANUMERIC_CHARSET.indexOf(n.charAt(i + 1)), t(a, 11, r);
+			}
+			return i < n.length && t(e.ALPHANUMERIC_CHARSET.indexOf(n.charAt(i)), 6, r), new e(e.Mode.ALPHANUMERIC, n.length, r);
+		}, e.makeSegments = function(t) {
+			return t == "" ? [] : e.isNumeric(t) ? [e.makeNumeric(t)] : e.isAlphanumeric(t) ? [e.makeAlphanumeric(t)] : [e.makeBytes(e.toUtf8ByteArray(t))];
+		}, e.makeEci = function(n) {
+			var r = [];
+			if (n < 0) throw RangeError("ECI assignment value out of range");
+			if (n < 128) t(n, 8, r);
+			else if (n < 16384) t(2, 2, r), t(n, 14, r);
+			else if (n < 1e6) t(6, 3, r), t(n, 21, r);
+			else throw RangeError("ECI assignment value out of range");
+			return new e(e.Mode.ECI, 0, r);
+		}, e.isNumeric = function(t) {
+			return e.NUMERIC_REGEX.test(t);
+		}, e.isAlphanumeric = function(t) {
+			return e.ALPHANUMERIC_REGEX.test(t);
+		}, e.prototype.getData = function() {
+			return this.bitData.slice();
+		}, e.getTotalBits = function(e, t) {
+			for (var n = 0, r = 0, i = e; r < i.length; r++) {
+				var a = i[r], o = a.mode.numCharCountBits(t);
+				if (a.numChars >= 1 << o) return Infinity;
+				n += 4 + o + a.bitData.length;
+			}
+			return n;
+		}, e.toUtf8ByteArray = function(e) {
+			e = encodeURI(e);
+			for (var t = [], n = 0; n < e.length; n++) e.charAt(n) == "%" ? (t.push(parseInt(e.substring(n + 1, n + 3), 16)), n += 2) : t.push(e.charCodeAt(n));
+			return t;
+		}, e.NUMERIC_REGEX = /^[0-9]*$/, e.ALPHANUMERIC_REGEX = /^[A-Z0-9 $%*+.\/:-]*$/, e.ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:", e;
+	}();
+	e.QrSegment = i;
+})(f ||= {}), (function(e) {
+	(function(e) {
+		e.Ecc = function() {
+			function e(e, t) {
+				this.ordinal = e, this.formatBits = t;
+			}
+			return e.LOW = new e(0, 1), e.MEDIUM = new e(1, 0), e.QUARTILE = new e(2, 3), e.HIGH = new e(3, 2), e;
+		}();
+	})(e.QrCode ||= {});
+})(f ||= {}), (function(e) {
+	(function(e) {
+		e.Mode = function() {
+			function e(e, t) {
+				this.modeBits = e, this.numBitsCharCount = t;
+			}
+			return e.prototype.numCharCountBits = function(e) {
+				return this.numBitsCharCount[Math.floor((e + 7) / 17)];
+			}, e.NUMERIC = new e(1, [
+				10,
+				12,
+				14
+			]), e.ALPHANUMERIC = new e(2, [
+				9,
+				11,
+				13
+			]), e.BYTE = new e(4, [
+				8,
+				16,
+				16
+			]), e.KANJI = new e(8, [
+				8,
+				10,
+				12
+			]), e.ECI = new e(7, [
+				0,
+				0,
+				0
+			]), e;
+		}();
+	})(e.QrSegment ||= {});
+})(f ||= {});
+var p = f, m = 0;
+function h(e) {
+	return e || `v-${m++}`;
 }
-var k = "L", re = 100, H = 0, ae = 0.1, ne = 2, G = {
-  L: T.QrCode.Ecc.LOW,
-  M: T.QrCode.Ecc.MEDIUM,
-  Q: T.QrCode.Ecc.QUARTILE,
-  H: T.QrCode.Ecc.HIGH
-}, ie = function() {
-  try {
-    new Path2D().addPath(new Path2D());
-  } catch {
-    return !1;
-  }
-  return !0;
-}();
-function Y(i) {
-  return i in G;
+var g = "L", _ = 100, v = 0, y = .1, b = 2, x = {
+	L: p.QrCode.Ecc.LOW,
+	M: p.QrCode.Ecc.MEDIUM,
+	Q: p.QrCode.Ecc.QUARTILE,
+	H: p.QrCode.Ecc.HIGH
+}, S = (function() {
+	try {
+		new Path2D().addPath(new Path2D());
+	} catch {
+		return !1;
+	}
+	return !0;
+})();
+function C(e) {
+	return e in x;
 }
-function oe(i, d, s) {
-  var o = d > 0 ? i[d - 1][s] : !1, c = d < i.length - 1 ? i[d + 1][s] : !1, l = s > 0 ? i[d][s - 1] : !1, a = s < i[d].length - 1 ? i[d][s + 1] : !1;
-  return {
-    nw: !o && !l,
-    ne: !o && !a,
-    se: !c && !a,
-    sw: !c && !l
-  };
+function w(e, t, n) {
+	var r = t > 0 ? e[t - 1][n] : !1, i = t < e.length - 1 ? e[t + 1][n] : !1, a = n > 0 ? e[t][n - 1] : !1, o = n < e[t].length - 1 ? e[t][n + 1] : !1;
+	return {
+		nw: !r && !a,
+		ne: !r && !o,
+		se: !i && !o,
+		sw: !i && !a
+	};
 }
-function ue(i, d, s) {
-  d === void 0 && (d = 0), s === void 0 && (s = 0);
-  for (var o = [], c = Math.min(s, 0.5), l = 0; l < i.length; l++)
-    for (var a = 0; a < i[l].length; a++)
-      if (i[l][a]) {
-        var e = oe(i, l, a), t = e.nw, r = e.ne, n = e.se, v = e.sw, u = a + d, f = l + d;
-        o.push("M".concat(u + (t ? c : 0), " ").concat(f), "L".concat(u + 1 - (r ? c : 0), " ").concat(f)), r && o.push("A".concat(c, " ").concat(c, " 0 0 1 ").concat(u + 1, " ").concat(f + c)), o.push("L".concat(u + 1, " ").concat(f + 1 - (n ? c : 0))), n && o.push("A".concat(c, " ").concat(c, " 0 0 1 ").concat(u + 1 - c, " ").concat(f + 1)), o.push("L".concat(u + (v ? c : 0), " ").concat(f + 1)), v && o.push("A".concat(c, " ").concat(c, " 0 0 1 ").concat(u, " ").concat(f + 1 - c)), o.push("L".concat(u, " ").concat(f + (t ? c : 0))), t && o.push("A".concat(c, " ").concat(c, " 0 0 1 ").concat(u + c, " ").concat(f)), o.push("z");
-      }
-  return o.join("");
+function T(e, t, n) {
+	t === void 0 && (t = 0), n === void 0 && (n = 0);
+	for (var r = [], i = Math.min(n, .5), a = 0; a < e.length; a++) for (var o = 0; o < e[a].length; o++) if (e[a][o]) {
+		var s = w(e, a, o), c = s.nw, l = s.ne, u = s.se, d = s.sw, f = o + t, p = a + t;
+		r.push(`M${f + (c ? i : 0)} ${p}`, `L${f + 1 - (l ? i : 0)} ${p}`), l && r.push(`A${i} ${i} 0 0 1 ${f + 1} ${p + i}`), r.push(`L${f + 1} ${p + 1 - (u ? i : 0)}`), u && r.push(`A${i} ${i} 0 0 1 ${f + 1 - i} ${p + 1}`), r.push(`L${f + (d ? i : 0)} ${p + 1}`), d && r.push(`A${i} ${i} 0 0 1 ${f} ${p + 1 - i}`), r.push(`L${f} ${p + (c ? i : 0)}`), c && r.push(`A${i} ${i} 0 0 1 ${f + i} ${p}`), r.push("z");
+	}
+	return r.join("");
 }
-function le(i, d) {
-  d === void 0 && (d = 0);
-  for (var s = [], o = 0; o < i.length; o++)
-    for (var c = i[o], l = null, a = 0; a < c.length; a++) {
-      var e = c[a];
-      if (!e && l !== null) {
-        s.push("M".concat(l + d, " ").concat(o + d, "h").concat(a - l, "v1H").concat(l + d, "z")), l = null;
-        continue;
-      }
-      if (a === c.length - 1) {
-        if (!e)
-          continue;
-        l === null ? s.push("M".concat(a + d, ",").concat(o + d, " h1v1H").concat(a + d, "z")) : s.push("M".concat(l + d, ",").concat(o + d, " h").concat(a + 1 - l, "v1H").concat(l + d, "z"));
-        continue;
-      }
-      e && l === null && (l = a);
-    }
-  return s.join("");
+function E(e, t) {
+	t === void 0 && (t = 0);
+	for (var n = [], r = 0; r < e.length; r++) for (var i = e[r], a = null, o = 0; o < i.length; o++) {
+		var s = i[o];
+		if (!s && a !== null) {
+			n.push(`M${a + t} ${r + t}h${o - a}v1H${a + t}z`), a = null;
+			continue;
+		}
+		if (o === i.length - 1) {
+			if (!s) continue;
+			a === null ? n.push(`M${o + t},${r + t} h1v1H${o + t}z`) : n.push(`M${a + t},${r + t} h${o + 1 - a}v1H${a + t}z`);
+			continue;
+		}
+		s && a === null && (a = o);
+	}
+	return n.join("");
 }
-function se(i, d, s, o) {
-  var c = o.width, l = o.height, a = o.x, e = o.y, t = i.length + s * 2, r = Math.floor(d * ae), n = t / d, v = (c || r) * n, u = (l || r) * n, f = a == null ? i.length / 2 - v / 2 : a * n, h = e == null ? i.length / 2 - u / 2 : e * n, m = (o.borderRadius || 0) * n;
-  return { x: f, y: h, h: u, w: v, borderRadius: m };
+function D(e, t, n, r) {
+	var i = r.width, a = r.height, o = r.x, s = r.y, c = e.length + n * 2, l = Math.floor(t * y), u = c / t, d = (i || l) * u, f = (a || l) * u;
+	return {
+		x: o == null ? e.length / 2 - d / 2 : o * u,
+		y: s == null ? e.length / 2 - f / 2 : s * u,
+		h: f,
+		w: d,
+		borderRadius: (r.borderRadius || 0) * u
+	};
 }
-function K(i) {
-  var d = b(function() {
-    var e;
-    return ((e = i.margin) !== null && e !== void 0 ? e : H) >>> 0;
-  }), s = b(function() {
-    var e = Y(i.level) ? i.level : k;
-    return T.QrCode.encodeText(i.value, G[e]).getModules();
-  }), o = b(function() {
-    return s.value.length + d.value * 2;
-  }), c = b(function() {
-    return i.radius > 0 ? ue(s.value, d.value, i.radius) : le(s.value, d.value);
-  }), l = b(function() {
-    if (!i.imageSettings.src)
-      return null;
-    var e = se(s.value, i.size, d.value, i.imageSettings);
-    return {
-      x: e.x + d.value,
-      y: e.y + d.value,
-      width: e.w,
-      height: e.h,
-      borderRadius: e.borderRadius
-    };
-  }), a = b(function() {
-    if (!i.imageSettings.excavate || !l.value)
-      return null;
-    var e = ne / (i.size / o.value);
-    return {
-      x: l.value.x - e,
-      y: l.value.y - e,
-      width: l.value.width + e * 2,
-      height: l.value.height + e * 2,
-      borderRadius: l.value.borderRadius
-    };
-  });
-  return { margin: d, numCells: o, cells: s, fgPath: c, imageProps: l, imageBorderProps: a };
+function O(e) {
+	var n = t(function() {
+		return (e.margin ?? v) >>> 0;
+	}), r = t(function() {
+		var t = C(e.level) ? e.level : g;
+		return p.QrCode.encodeText(e.value, x[t]).getModules();
+	}), i = t(function() {
+		return r.value.length + n.value * 2;
+	}), a = t(function() {
+		return e.radius > 0 ? T(r.value, n.value, e.radius) : E(r.value, n.value);
+	}), o = t(function() {
+		if (!e.imageSettings.src) return null;
+		var t = D(r.value, e.size, n.value, e.imageSettings);
+		return {
+			x: t.x + n.value,
+			y: t.y + n.value,
+			width: t.w,
+			height: t.h,
+			borderRadius: t.borderRadius
+		};
+	});
+	return {
+		margin: n,
+		numCells: i,
+		cells: r,
+		fgPath: a,
+		imageProps: o,
+		imageBorderProps: t(function() {
+			if (!e.imageSettings.excavate || !o.value) return null;
+			var t = b / (e.size / i.value);
+			return {
+				x: o.value.x - t,
+				y: o.value.y - t,
+				width: o.value.width + t * 2,
+				height: o.value.height + t * 2,
+				borderRadius: o.value.borderRadius
+			};
+		})
+	};
 }
-function V(i, d) {
-  var s = document.createElement("a");
-  s.download = d, s.href = i, document.body.appendChild(s), s.click(), document.body.removeChild(s);
+function k(e, t) {
+	var n = document.createElement("a");
+	n.download = t, n.href = e, document.body.appendChild(n), n.click(), document.body.removeChild(n);
 }
-var Q = {
-  value: {
-    type: String,
-    required: !0,
-    default: ""
-  },
-  size: {
-    type: Number,
-    default: re
-  },
-  level: {
-    type: String,
-    default: k,
-    validator: function(i) {
-      return Y(i);
-    }
-  },
-  background: {
-    type: String,
-    default: "#fff"
-  },
-  foreground: {
-    type: String,
-    default: "#000"
-  },
-  margin: {
-    type: Number,
-    default: H,
-    validator: function(i) {
-      return i >= 0;
-    }
-  },
-  imageSettings: {
-    type: Object,
-    default: function() {
-      return {};
-    }
-  },
-  gradient: {
-    type: Boolean,
-    default: !1
-  },
-  gradientType: {
-    type: String,
-    default: "linear",
-    validator: function(i) {
-      return ["linear", "radial"].indexOf(i) > -1;
-    }
-  },
-  gradientStartColor: {
-    type: String,
-    default: "#000"
-  },
-  gradientEndColor: {
-    type: String,
-    default: "#fff"
-  },
-  radius: {
-    type: Number,
-    default: 0,
-    validator: function(i) {
-      return !isNaN(i) && i >= 0 && i <= 0.5;
-    }
-  },
-  id: {
-    type: String,
-    required: !1
-  }
-}, ve = N(N({}, Q), { renderAs: {
-  type: String,
-  required: !1,
-  default: "canvas",
-  validator: function(i) {
-    return ["canvas", "svg"].indexOf(i) > -1;
-  }
-} }), ce = B({
-  name: "QRCodeSvg",
-  props: Q,
-  setup: function(i, d) {
-    var s = K(i), o = s.numCells, c = s.fgPath, l = s.imageProps, a = s.imageBorderProps, e = O(), t = te(i.id), r = "qrcode.vue-gradient-".concat(t), n = "qrcode.vue-logo-clip-path-".concat(t), v = b(function() {
-      if (!i.gradient)
-        return null;
-      var h = i.gradientType === "linear" ? {
-        x1: "0%",
-        y1: "0%",
-        x2: "100%",
-        y2: "100%"
-      } : {
-        cx: "50%",
-        cy: "50%",
-        r: "50%",
-        fx: "50%",
-        fy: "50%"
-      };
-      return w(i.gradientType === "linear" ? "linearGradient" : "radialGradient", N({ id: r }, h), [
-        w("stop", {
-          offset: "0%",
-          style: { stopColor: i.gradientStartColor }
-        }),
-        w("stop", {
-          offset: "100%",
-          style: { stopColor: i.gradientEndColor }
-        })
-      ]);
-    }), u = b(function() {
-      if (!l.value)
-        return null;
-      var h = l.value.borderRadius;
-      return h <= 0 ? null : w("clipPath", { id: n }, [
-        w("rect", {
-          x: l.value.x,
-          y: l.value.y,
-          width: l.value.width,
-          height: l.value.height,
-          rx: h,
-          ry: h
-        })
-      ]);
-    }), f = function(h) {
-      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent('<?xml version="1.0" standalone="no"?>' + new XMLSerializer().serializeToString(h));
-    };
-    return d.expose({
-      toDataURL: function() {
-        var h = e.value;
-        if (h)
-          return f(h);
-      },
-      download: function(h) {
-        h === void 0 && (h = "qrcode.svg");
-        var m = e.value;
-        m && V(f(m), h);
-      }
-    }), function() {
-      return w("svg", {
-        ref: e,
-        width: i.size,
-        height: i.size,
-        xmlns: "http://www.w3.org/2000/svg",
-        viewBox: "0 0 ".concat(o.value, " ").concat(o.value),
-        role: "img"
-      }, [
-        w("defs", {}, [v.value, u.value].filter(Boolean)),
-        w("rect", {
-          width: "100%",
-          height: "100%",
-          fill: i.background
-        }),
-        w("path", {
-          fill: i.gradient ? "url(#".concat(r, ")") : i.foreground,
-          d: c.value
-        }),
-        a.value && w("rect", {
-          x: a.value.x,
-          y: a.value.y,
-          width: a.value.width,
-          height: a.value.height,
-          fill: i.background,
-          rx: a.value.borderRadius,
-          ry: a.value.borderRadius
-        }),
-        i.imageSettings.src && l.value && w("image", N({ href: i.imageSettings.src, crossorigin: i.imageSettings.crossOrigin, "clip-path": l.value.borderRadius > 0 ? "url(#".concat(n, ")") : void 0 }, l.value))
-      ]);
-    };
-  }
-}), fe = B({
-  name: "QRCodeCanvas",
-  props: Q,
-  setup: function(i, d) {
-    var s = K(i), o = s.margin, c = s.cells, l = s.numCells, a = s.fgPath, e = s.imageProps, t = s.imageBorderProps, r = O(null), n = O(null), v = function(f, h, m, R, C, M) {
-      f.beginPath(), f.roundRect ? f.roundRect(h, m, R, C, M) : f.rect(h, m, R, C);
-    }, u = function() {
-      var f = i.size, h = i.background, m = i.foreground, R = i.gradient, C = i.gradientType, M = i.gradientStartColor, S = i.gradientEndColor, E = r.value;
-      if (E) {
-        var g = E.getContext("2d");
-        if (g) {
-          var P = n.value, p = typeof window < "u" && window.devicePixelRatio || 1, y = f / l.value * p;
-          if (E.height = E.width = f * p, g.setTransform(y, 0, 0, y, 0, 0), g.fillStyle = h, g.fillRect(0, 0, l.value, l.value), R) {
-            var A = void 0;
-            C === "linear" ? A = g.createLinearGradient(0, 0, l.value, l.value) : A = g.createRadialGradient(l.value / 2, l.value / 2, 0, l.value / 2, l.value / 2, l.value / 2), A.addColorStop(0, M), A.addColorStop(1, S), g.fillStyle = A;
-          } else
-            g.fillStyle = m;
-          ie ? g.fill(new Path2D(a.value)) : c.value.forEach(function(_, F) {
-            _.forEach(function(D, W) {
-              D && g.fillRect(W + o.value, F + o.value, 1, 1);
-            });
-          });
-          var U = i.imageSettings.src && P && P.naturalWidth !== 0 && P.naturalHeight !== 0;
-          if (U && e.value) {
-            if (t.value) {
-              var I = t.value;
-              g.fillStyle = i.background, v(g, I.x, I.y, I.width, I.height, I.borderRadius), g.fill();
-            }
-            var z = e.value.borderRadius;
-            z > 0 ? (g.save(), v(g, e.value.x, e.value.y, e.value.width, e.value.height, z), g.clip(), g.drawImage(P, e.value.x, e.value.y, e.value.width, e.value.height), g.restore()) : g.drawImage(P, e.value.x, e.value.y, e.value.width, e.value.height);
-          }
-        }
-      }
-    };
-    return X(u), q(u, { flush: "post" }), d.expose({
-      toDataURL: function(f, h) {
-        var m;
-        return (m = r.value) === null || m === void 0 ? void 0 : m.toDataURL(f, h);
-      },
-      download: function(f) {
-        f === void 0 && (f = "qrcode.png");
-        var h = r.value;
-        h && V(h.toDataURL("image/png"), f);
-      }
-    }), function() {
-      return w(Z, [
-        w("canvas", N(N({}, d.attrs), { ref: r, role: "img", style: N(N({}, d.attrs.style), { width: "".concat(i.size, "px"), height: "".concat(i.size, "px") }) })),
-        i.imageSettings.src && w("img", {
-          ref: n,
-          src: i.imageSettings.src,
-          crossorigin: i.imageSettings.crossOrigin,
-          style: { display: "none" },
-          onLoad: u
-        })
-      ]);
-    };
-  }
-}), de = B({
-  name: "Qrcode",
-  props: ve,
-  setup: function(i, d) {
-    var s = O();
-    return d.expose({
-      toDataURL: function(o, c) {
-        var l, a;
-        return (a = (l = s.value) === null || l === void 0 ? void 0 : l.toDataURL) === null || a === void 0 ? void 0 : a.call(l, o, c);
-      },
-      download: function(o) {
-        var c, l;
-        return (l = (c = s.value) === null || c === void 0 ? void 0 : c.download) === null || l === void 0 ? void 0 : l.call(c, o);
-      }
-    }), function() {
-      return w(i.renderAs === "svg" ? ce : fe, {
-        ref: s,
-        value: i.value,
-        size: i.size,
-        margin: i.margin,
-        level: i.level,
-        background: i.background,
-        foreground: i.foreground,
-        imageSettings: i.imageSettings,
-        gradient: i.gradient,
-        gradientType: i.gradientType,
-        gradientStartColor: i.gradientStartColor,
-        gradientEndColor: i.gradientEndColor,
-        radius: i.radius,
-        id: i.id
-      });
-    };
-  }
-});
-const me = /* @__PURE__ */ B({
-  __name: "VietQR",
-  props: {
-    renderAs: { default: "svg" },
-    size: { default: 256 },
-    className: {},
-    imageSettings: {},
-    bankId: {},
-    accountNo: {},
-    accountName: {},
-    amount: {},
-    content: {}
-  },
-  setup(i) {
-    const d = i, s = b(() => x(d));
-    return (o, c) => ($(), J(de, {
-      value: s.value,
-      size: d.size,
-      "render-as": d.renderAs,
-      class: j(d.className),
-      "image-settings": d.imageSettings,
-      margin: 0,
-      level: "Q"
-    }, null, 8, ["value", "size", "render-as", "class", "image-settings"]));
-  }
-});
-export {
-  me as VietQR,
-  me as default
-};
+var A = {
+	value: {
+		type: String,
+		required: !0,
+		default: ""
+	},
+	size: {
+		type: Number,
+		default: _
+	},
+	level: {
+		type: String,
+		default: g,
+		validator: function(e) {
+			return C(e);
+		}
+	},
+	background: {
+		type: String,
+		default: "#fff"
+	},
+	foreground: {
+		type: String,
+		default: "#000"
+	},
+	margin: {
+		type: Number,
+		default: v,
+		validator: function(e) {
+			return e >= 0;
+		}
+	},
+	imageSettings: {
+		type: Object,
+		default: function() {
+			return {};
+		}
+	},
+	gradient: {
+		type: Boolean,
+		default: !1
+	},
+	gradientType: {
+		type: String,
+		default: "linear",
+		validator: function(e) {
+			return ["linear", "radial"].indexOf(e) > -1;
+		}
+	},
+	gradientStartColor: {
+		type: String,
+		default: "#000"
+	},
+	gradientEndColor: {
+		type: String,
+		default: "#fff"
+	},
+	radius: {
+		type: Number,
+		default: 0,
+		validator: function(e) {
+			return !isNaN(e) && e >= 0 && e <= .5;
+		}
+	},
+	id: {
+		type: String,
+		required: !1
+	}
+}, j = d(d({}, A), { renderAs: {
+	type: String,
+	required: !1,
+	default: "canvas",
+	validator: function(e) {
+		return ["canvas", "svg"].indexOf(e) > -1;
+	}
+} }), M = r({
+	name: "QRCodeSvg",
+	props: A,
+	setup: function(e, n) {
+		var r = O(e), a = r.numCells, o = r.fgPath, s = r.imageProps, l = r.imageBorderProps, u = c(), f = h(e.id), p = `qrcode.vue-gradient-${f}`, m = `qrcode.vue-logo-clip-path-${f}`, g = t(function() {
+			if (!e.gradient) return null;
+			var t = e.gradientType === "linear" ? {
+				x1: "0%",
+				y1: "0%",
+				x2: "100%",
+				y2: "100%"
+			} : {
+				cx: "50%",
+				cy: "50%",
+				r: "50%",
+				fx: "50%",
+				fy: "50%"
+			};
+			return i(e.gradientType === "linear" ? "linearGradient" : "radialGradient", d({ id: p }, t), [i("stop", {
+				offset: "0%",
+				style: { stopColor: e.gradientStartColor }
+			}), i("stop", {
+				offset: "100%",
+				style: { stopColor: e.gradientEndColor }
+			})]);
+		}), _ = t(function() {
+			if (!s.value) return null;
+			var e = s.value.borderRadius;
+			return e <= 0 ? null : i("clipPath", { id: m }, [i("rect", {
+				x: s.value.x,
+				y: s.value.y,
+				width: s.value.width,
+				height: s.value.height,
+				rx: e,
+				ry: e
+			})]);
+		}), v = function(e) {
+			return "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<?xml version=\"1.0\" standalone=\"no\"?>" + new XMLSerializer().serializeToString(e));
+		};
+		return n.expose({
+			toDataURL: function() {
+				var e = u.value;
+				if (e) return v(e);
+			},
+			download: function(e) {
+				e === void 0 && (e = "qrcode.svg");
+				var t = u.value;
+				t && k(v(t), e);
+			}
+		}), function() {
+			return i("svg", {
+				ref: u,
+				width: e.size,
+				height: e.size,
+				xmlns: "http://www.w3.org/2000/svg",
+				viewBox: `0 0 ${a.value} ${a.value}`,
+				role: "img"
+			}, [
+				i("defs", {}, [g.value, _.value].filter(Boolean)),
+				i("rect", {
+					width: "100%",
+					height: "100%",
+					fill: e.background
+				}),
+				i("path", {
+					fill: e.gradient ? `url(#${p})` : e.foreground,
+					d: o.value
+				}),
+				l.value && i("rect", {
+					x: l.value.x,
+					y: l.value.y,
+					width: l.value.width,
+					height: l.value.height,
+					fill: e.background,
+					rx: l.value.borderRadius,
+					ry: l.value.borderRadius
+				}),
+				e.imageSettings.src && s.value && i("image", d({
+					href: e.imageSettings.src,
+					crossorigin: e.imageSettings.crossOrigin,
+					"clip-path": s.value.borderRadius > 0 ? `url(#${m})` : void 0
+				}, s.value))
+			]);
+		};
+	}
+}), N = r({
+	name: "QRCodeCanvas",
+	props: A,
+	setup: function(t, n) {
+		var r = O(t), a = r.margin, s = r.cells, u = r.numCells, f = r.fgPath, p = r.imageProps, m = r.imageBorderProps, h = c(null), g = c(null), _ = function(e, t, n, r, i, a) {
+			e.beginPath(), e.roundRect ? e.roundRect(t, n, r, i, a) : e.rect(t, n, r, i);
+		}, v = function() {
+			var e = t.size, n = t.background, r = t.foreground, i = t.gradient, o = t.gradientType, c = t.gradientStartColor, l = t.gradientEndColor, d = h.value;
+			if (d) {
+				var v = d.getContext("2d");
+				if (v) {
+					var y = g.value, b = typeof window < "u" && window.devicePixelRatio || 1, x = e / u.value * b;
+					if (d.height = d.width = e * b, v.setTransform(x, 0, 0, x, 0, 0), v.fillStyle = n, v.fillRect(0, 0, u.value, u.value), i) {
+						var C = void 0;
+						C = o === "linear" ? v.createLinearGradient(0, 0, u.value, u.value) : v.createRadialGradient(u.value / 2, u.value / 2, 0, u.value / 2, u.value / 2, u.value / 2), C.addColorStop(0, c), C.addColorStop(1, l), v.fillStyle = C;
+					} else v.fillStyle = r;
+					if (S ? v.fill(new Path2D(f.value)) : s.value.forEach(function(e, t) {
+						e.forEach(function(e, n) {
+							e && v.fillRect(n + a.value, t + a.value, 1, 1);
+						});
+					}), t.imageSettings.src && y && y.naturalWidth !== 0 && y.naturalHeight !== 0 && p.value) {
+						if (m.value) {
+							var w = m.value;
+							v.fillStyle = t.background, _(v, w.x, w.y, w.width, w.height, w.borderRadius), v.fill();
+						}
+						var T = p.value.borderRadius;
+						T > 0 ? (v.save(), _(v, p.value.x, p.value.y, p.value.width, p.value.height, T), v.clip(), v.drawImage(y, p.value.x, p.value.y, p.value.width, p.value.height), v.restore()) : v.drawImage(y, p.value.x, p.value.y, p.value.width, p.value.height);
+					}
+				}
+			}
+		};
+		return o(v), l(v, { flush: "post" }), n.expose({
+			toDataURL: function(e, t) {
+				return h.value?.toDataURL(e, t);
+			},
+			download: function(e) {
+				e === void 0 && (e = "qrcode.png");
+				var t = h.value;
+				t && k(t.toDataURL("image/png"), e);
+			}
+		}), function() {
+			return i(e, [i("canvas", d(d({}, n.attrs), {
+				ref: h,
+				role: "img",
+				style: d(d({}, n.attrs.style), {
+					width: `${t.size}px`,
+					height: `${t.size}px`
+				})
+			})), t.imageSettings.src && i("img", {
+				ref: g,
+				src: t.imageSettings.src,
+				crossorigin: t.imageSettings.crossOrigin,
+				style: { display: "none" },
+				onLoad: v
+			})]);
+		};
+	}
+}), P = r({
+	name: "Qrcode",
+	props: j,
+	setup: function(e, t) {
+		var n = c();
+		return t.expose({
+			toDataURL: function(e, t) {
+				var r;
+				return ((r = n.value)?.toDataURL)?.call(r, e, t);
+			},
+			download: function(e) {
+				var t;
+				return ((t = n.value)?.download)?.call(t, e);
+			}
+		}), function() {
+			return i(e.renderAs === "svg" ? M : N, {
+				ref: n,
+				value: e.value,
+				size: e.size,
+				margin: e.margin,
+				level: e.level,
+				background: e.background,
+				foreground: e.foreground,
+				imageSettings: e.imageSettings,
+				gradient: e.gradient,
+				gradientType: e.gradientType,
+				gradientStartColor: e.gradientStartColor,
+				gradientEndColor: e.gradientEndColor,
+				radius: e.radius,
+				id: e.id
+			});
+		};
+	}
+}), F = /* @__PURE__ */ r({
+	__name: "VietQR",
+	props: {
+		renderAs: { default: "svg" },
+		size: { default: 256 },
+		className: {},
+		imageSettings: {},
+		bankId: {},
+		accountNo: {},
+		accountName: {},
+		amount: {},
+		content: {}
+	},
+	setup(e) {
+		let r = e, i = t(() => u(r));
+		return (e, t) => (s(), n(P, {
+			value: i.value,
+			size: r.size,
+			"render-as": r.renderAs,
+			class: a(r.className),
+			"image-settings": r.imageSettings,
+			margin: 0,
+			level: "Q"
+		}, null, 8, [
+			"value",
+			"size",
+			"render-as",
+			"class",
+			"image-settings"
+		]));
+	}
+}), I = F;
+//#endregion
+export { F as VietQR, I as default };
