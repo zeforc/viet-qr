@@ -1,6 +1,6 @@
 import { computed as e, createCommentVNode as t, createElementBlock as n, createElementVNode as r, createVNode as i, defineComponent as a, guardReactiveProps as o, normalizeClass as s, normalizeProps as c, openBlock as l, toDisplayString as u, unref as d } from "vue";
 import { VietQR as f } from "@viet-qr/vue";
-import { getBankByBin as p, getBankByShortName as m } from "@viet-qr/core";
+import { getBankByBin as p, getBankByCode as m } from "@viet-qr/core";
 //#region src/vue/CompactCard.vue?vue&type=script&setup=true&lang.ts
 var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 	key: 1,
@@ -27,7 +27,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 		imageSettings: {}
 	},
 	setup(a) {
-		let E = a, D = e(() => p(E.bankId) || m(E.bankId)), O = e(() => D.value?.shortName || E.bankId), k = e(() => E.amount ? new Intl.NumberFormat("vi-VN", {
+		let E = a, D = e(() => p(E.bankId) || m(E.bankId)), O = e(() => D.value?.name || E.bankId), k = e(() => E.amount ? new Intl.NumberFormat("vi-VN", {
 			style: "currency",
 			currency: "VND"
 		}).format(E.amount) : null), A = e(() => ({
@@ -74,7 +74,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 		imageSettings: {}
 	},
 	setup(a) {
-		let h = a, g = e(() => p(h.bankId) || m(h.bankId)), _ = e(() => g.value?.shortName || h.bankId), v = e(() => ({
+		let h = a, g = e(() => p(h.bankId) || m(h.bankId)), _ = e(() => g.value?.name || h.bankId), v = e(() => ({
 			bankId: h.bankId,
 			accountNo: h.accountNo,
 			accountName: h.accountName,

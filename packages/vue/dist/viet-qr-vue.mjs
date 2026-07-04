@@ -1,12 +1,12 @@
-import { Fragment as e, computed as t, createBlock as n, defineComponent as r, h as i, normalizeClass as a, onMounted as o, openBlock as s, ref as c, watchEffect as l } from "vue";
-import { generateVietQR as u } from "@viet-qr/core";
+import { Fragment as e, Teleport as t, Transition as n, computed as r, createBlock as i, createCommentVNode as a, createElementBlock as o, createElementVNode as s, createStaticVNode as c, createTextVNode as l, createVNode as u, defineComponent as d, h as f, normalizeClass as p, onMounted as m, onUnmounted as h, openBlock as g, ref as _, toDisplayString as v, watch as y, watchEffect as b, withCtx as x, withModifiers as S } from "vue";
+import { generateVietQR as C } from "@viet-qr/core";
 //#region ../../node_modules/.pnpm/qrcode.vue@3.10.0_vue@3.5.39_typescript@5.9.3_/node_modules/qrcode.vue/dist/qrcode.vue.esm.js
-var d = function() {
-	return d = Object.assign || function(e) {
+var w = function() {
+	return w = Object.assign || function(e) {
 		for (var t, n = 1, r = arguments.length; n < r; n++) for (var i in t = arguments[n], t) Object.prototype.hasOwnProperty.call(t, i) && (e[i] = t[i]);
 		return e;
-	}, d.apply(this, arguments);
-}, f;
+	}, w.apply(this, arguments);
+}, T;
 (function(e) {
 	e.QrCode = function() {
 		function a(e, t, n, i) {
@@ -658,7 +658,7 @@ var d = function() {
 		}, e.NUMERIC_REGEX = /^[0-9]*$/, e.ALPHANUMERIC_REGEX = /^[A-Z0-9 $%*+.\/:-]*$/, e.ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:", e;
 	}();
 	e.QrSegment = i;
-})(f ||= {}), (function(e) {
+})(T ||= {}), (function(e) {
 	(function(e) {
 		e.Ecc = function() {
 			function e(e, t) {
@@ -667,7 +667,7 @@ var d = function() {
 			return e.LOW = new e(0, 1), e.MEDIUM = new e(1, 0), e.QUARTILE = new e(2, 3), e.HIGH = new e(3, 2), e;
 		}();
 	})(e.QrCode ||= {});
-})(f ||= {}), (function(e) {
+})(T ||= {}), (function(e) {
 	(function(e) {
 		e.Mode = function() {
 			function e(e, t) {
@@ -698,17 +698,17 @@ var d = function() {
 			]), e;
 		}();
 	})(e.QrSegment ||= {});
-})(f ||= {});
-var p = f, m = 0;
-function h(e) {
-	return e || `v-${m++}`;
+})(T ||= {});
+var E = T, D = 0;
+function O(e) {
+	return e || `v-${D++}`;
 }
-var g = "L", _ = 100, v = 0, y = .1, b = 2, x = {
-	L: p.QrCode.Ecc.LOW,
-	M: p.QrCode.Ecc.MEDIUM,
-	Q: p.QrCode.Ecc.QUARTILE,
-	H: p.QrCode.Ecc.HIGH
-}, S = (function() {
+var k = "L", A = 100, j = 0, M = .1, N = 2, P = {
+	L: E.QrCode.Ecc.LOW,
+	M: E.QrCode.Ecc.MEDIUM,
+	Q: E.QrCode.Ecc.QUARTILE,
+	H: E.QrCode.Ecc.HIGH
+}, F = (function() {
 	try {
 		new Path2D().addPath(new Path2D());
 	} catch {
@@ -716,10 +716,10 @@ var g = "L", _ = 100, v = 0, y = .1, b = 2, x = {
 	}
 	return !0;
 })();
-function C(e) {
-	return e in x;
+function I(e) {
+	return e in P;
 }
-function w(e, t, n) {
+function L(e, t, n) {
 	var r = t > 0 ? e[t - 1][n] : !1, i = t < e.length - 1 ? e[t + 1][n] : !1, a = n > 0 ? e[t][n - 1] : !1, o = n < e[t].length - 1 ? e[t][n + 1] : !1;
 	return {
 		nw: !r && !a,
@@ -728,15 +728,15 @@ function w(e, t, n) {
 		sw: !i && !a
 	};
 }
-function T(e, t, n) {
+function R(e, t, n) {
 	t === void 0 && (t = 0), n === void 0 && (n = 0);
 	for (var r = [], i = Math.min(n, .5), a = 0; a < e.length; a++) for (var o = 0; o < e[a].length; o++) if (e[a][o]) {
-		var s = w(e, a, o), c = s.nw, l = s.ne, u = s.se, d = s.sw, f = o + t, p = a + t;
+		var s = L(e, a, o), c = s.nw, l = s.ne, u = s.se, d = s.sw, f = o + t, p = a + t;
 		r.push(`M${f + (c ? i : 0)} ${p}`, `L${f + 1 - (l ? i : 0)} ${p}`), l && r.push(`A${i} ${i} 0 0 1 ${f + 1} ${p + i}`), r.push(`L${f + 1} ${p + 1 - (u ? i : 0)}`), u && r.push(`A${i} ${i} 0 0 1 ${f + 1 - i} ${p + 1}`), r.push(`L${f + (d ? i : 0)} ${p + 1}`), d && r.push(`A${i} ${i} 0 0 1 ${f} ${p + 1 - i}`), r.push(`L${f} ${p + (c ? i : 0)}`), c && r.push(`A${i} ${i} 0 0 1 ${f + i} ${p}`), r.push("z");
 	}
 	return r.join("");
 }
-function E(e, t) {
+function z(e, t) {
 	t === void 0 && (t = 0);
 	for (var n = [], r = 0; r < e.length; r++) for (var i = e[r], a = null, o = 0; o < i.length; o++) {
 		var s = i[o];
@@ -753,8 +753,8 @@ function E(e, t) {
 	}
 	return n.join("");
 }
-function D(e, t, n, r) {
-	var i = r.width, a = r.height, o = r.x, s = r.y, c = e.length + n * 2, l = Math.floor(t * y), u = c / t, d = (i || l) * u, f = (a || l) * u;
+function B(e, t, n, r) {
+	var i = r.width, a = r.height, o = r.x, s = r.y, c = e.length + n * 2, l = Math.floor(t * M), u = c / t, d = (i || l) * u, f = (a || l) * u;
 	return {
 		x: o == null ? e.length / 2 - d / 2 : o * u,
 		y: s == null ? e.length / 2 - f / 2 : s * u,
@@ -763,36 +763,36 @@ function D(e, t, n, r) {
 		borderRadius: (r.borderRadius || 0) * u
 	};
 }
-function O(e) {
-	var n = t(function() {
-		return (e.margin ?? v) >>> 0;
-	}), r = t(function() {
-		var t = C(e.level) ? e.level : g;
-		return p.QrCode.encodeText(e.value, x[t]).getModules();
-	}), i = t(function() {
-		return r.value.length + n.value * 2;
-	}), a = t(function() {
-		return e.radius > 0 ? T(r.value, n.value, e.radius) : E(r.value, n.value);
-	}), o = t(function() {
+function V(e) {
+	var t = r(function() {
+		return (e.margin ?? j) >>> 0;
+	}), n = r(function() {
+		var t = I(e.level) ? e.level : k;
+		return E.QrCode.encodeText(e.value, P[t]).getModules();
+	}), i = r(function() {
+		return n.value.length + t.value * 2;
+	}), a = r(function() {
+		return e.radius > 0 ? R(n.value, t.value, e.radius) : z(n.value, t.value);
+	}), o = r(function() {
 		if (!e.imageSettings.src) return null;
-		var t = D(r.value, e.size, n.value, e.imageSettings);
+		var r = B(n.value, e.size, t.value, e.imageSettings);
 		return {
-			x: t.x + n.value,
-			y: t.y + n.value,
-			width: t.w,
-			height: t.h,
-			borderRadius: t.borderRadius
+			x: r.x + t.value,
+			y: r.y + t.value,
+			width: r.w,
+			height: r.h,
+			borderRadius: r.borderRadius
 		};
 	});
 	return {
-		margin: n,
+		margin: t,
 		numCells: i,
-		cells: r,
+		cells: n,
 		fgPath: a,
 		imageProps: o,
-		imageBorderProps: t(function() {
+		imageBorderProps: r(function() {
 			if (!e.imageSettings.excavate || !o.value) return null;
-			var t = b / (e.size / i.value);
+			var t = N / (e.size / i.value);
 			return {
 				x: o.value.x - t,
 				y: o.value.y - t,
@@ -803,11 +803,11 @@ function O(e) {
 		})
 	};
 }
-function k(e, t) {
+function H(e, t) {
 	var n = document.createElement("a");
 	n.download = t, n.href = e, document.body.appendChild(n), n.click(), document.body.removeChild(n);
 }
-var A = {
+var U = {
 	value: {
 		type: String,
 		required: !0,
@@ -815,13 +815,13 @@ var A = {
 	},
 	size: {
 		type: Number,
-		default: _
+		default: A
 	},
 	level: {
 		type: String,
-		default: g,
+		default: k,
 		validator: function(e) {
-			return C(e);
+			return I(e);
 		}
 	},
 	background: {
@@ -834,7 +834,7 @@ var A = {
 	},
 	margin: {
 		type: Number,
-		default: v,
+		default: j,
 		validator: function(e) {
 			return e >= 0;
 		}
@@ -875,18 +875,18 @@ var A = {
 		type: String,
 		required: !1
 	}
-}, j = d(d({}, A), { renderAs: {
+}, W = w(w({}, U), { renderAs: {
 	type: String,
 	required: !1,
 	default: "canvas",
 	validator: function(e) {
 		return ["canvas", "svg"].indexOf(e) > -1;
 	}
-} }), M = r({
+} }), G = d({
 	name: "QRCodeSvg",
-	props: A,
-	setup: function(e, n) {
-		var r = O(e), a = r.numCells, o = r.fgPath, s = r.imageProps, l = r.imageBorderProps, u = c(), f = h(e.id), p = `qrcode.vue-gradient-${f}`, m = `qrcode.vue-logo-clip-path-${f}`, g = t(function() {
+	props: U,
+	setup: function(e, t) {
+		var n = V(e), i = n.numCells, a = n.fgPath, o = n.imageProps, s = n.imageBorderProps, c = _(), l = O(e.id), u = `qrcode.vue-gradient-${l}`, d = `qrcode.vue-logo-clip-path-${l}`, p = r(function() {
 			if (!e.gradient) return null;
 			var t = e.gradientType === "linear" ? {
 				x1: "0%",
@@ -900,135 +900,135 @@ var A = {
 				fx: "50%",
 				fy: "50%"
 			};
-			return i(e.gradientType === "linear" ? "linearGradient" : "radialGradient", d({ id: p }, t), [i("stop", {
+			return f(e.gradientType === "linear" ? "linearGradient" : "radialGradient", w({ id: u }, t), [f("stop", {
 				offset: "0%",
 				style: { stopColor: e.gradientStartColor }
-			}), i("stop", {
+			}), f("stop", {
 				offset: "100%",
 				style: { stopColor: e.gradientEndColor }
 			})]);
-		}), _ = t(function() {
-			if (!s.value) return null;
-			var e = s.value.borderRadius;
-			return e <= 0 ? null : i("clipPath", { id: m }, [i("rect", {
-				x: s.value.x,
-				y: s.value.y,
-				width: s.value.width,
-				height: s.value.height,
+		}), m = r(function() {
+			if (!o.value) return null;
+			var e = o.value.borderRadius;
+			return e <= 0 ? null : f("clipPath", { id: d }, [f("rect", {
+				x: o.value.x,
+				y: o.value.y,
+				width: o.value.width,
+				height: o.value.height,
 				rx: e,
 				ry: e
 			})]);
-		}), v = function(e) {
+		}), h = function(e) {
 			return "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<?xml version=\"1.0\" standalone=\"no\"?>" + new XMLSerializer().serializeToString(e));
 		};
-		return n.expose({
+		return t.expose({
 			toDataURL: function() {
-				var e = u.value;
-				if (e) return v(e);
+				var e = c.value;
+				if (e) return h(e);
 			},
 			download: function(e) {
 				e === void 0 && (e = "qrcode.svg");
-				var t = u.value;
-				t && k(v(t), e);
+				var t = c.value;
+				t && H(h(t), e);
 			}
 		}), function() {
-			return i("svg", {
-				ref: u,
+			return f("svg", {
+				ref: c,
 				width: e.size,
 				height: e.size,
 				xmlns: "http://www.w3.org/2000/svg",
-				viewBox: `0 0 ${a.value} ${a.value}`,
+				viewBox: `0 0 ${i.value} ${i.value}`,
 				role: "img"
 			}, [
-				i("defs", {}, [g.value, _.value].filter(Boolean)),
-				i("rect", {
+				f("defs", {}, [p.value, m.value].filter(Boolean)),
+				f("rect", {
 					width: "100%",
 					height: "100%",
 					fill: e.background
 				}),
-				i("path", {
-					fill: e.gradient ? `url(#${p})` : e.foreground,
-					d: o.value
+				f("path", {
+					fill: e.gradient ? `url(#${u})` : e.foreground,
+					d: a.value
 				}),
-				l.value && i("rect", {
-					x: l.value.x,
-					y: l.value.y,
-					width: l.value.width,
-					height: l.value.height,
+				s.value && f("rect", {
+					x: s.value.x,
+					y: s.value.y,
+					width: s.value.width,
+					height: s.value.height,
 					fill: e.background,
-					rx: l.value.borderRadius,
-					ry: l.value.borderRadius
+					rx: s.value.borderRadius,
+					ry: s.value.borderRadius
 				}),
-				e.imageSettings.src && s.value && i("image", d({
+				e.imageSettings.src && o.value && f("image", w({
 					href: e.imageSettings.src,
 					crossorigin: e.imageSettings.crossOrigin,
-					"clip-path": s.value.borderRadius > 0 ? `url(#${m})` : void 0
-				}, s.value))
+					"clip-path": o.value.borderRadius > 0 ? `url(#${d})` : void 0
+				}, o.value))
 			]);
 		};
 	}
-}), N = r({
+}), K = d({
 	name: "QRCodeCanvas",
-	props: A,
+	props: U,
 	setup: function(t, n) {
-		var r = O(t), a = r.margin, s = r.cells, u = r.numCells, f = r.fgPath, p = r.imageProps, m = r.imageBorderProps, h = c(null), g = c(null), _ = function(e, t, n, r, i, a) {
+		var r = V(t), i = r.margin, a = r.cells, o = r.numCells, s = r.fgPath, c = r.imageProps, l = r.imageBorderProps, u = _(null), d = _(null), p = function(e, t, n, r, i, a) {
 			e.beginPath(), e.roundRect ? e.roundRect(t, n, r, i, a) : e.rect(t, n, r, i);
-		}, v = function() {
-			var e = t.size, n = t.background, r = t.foreground, i = t.gradient, o = t.gradientType, c = t.gradientStartColor, l = t.gradientEndColor, d = h.value;
-			if (d) {
-				var v = d.getContext("2d");
+		}, h = function() {
+			var e = t.size, n = t.background, r = t.foreground, f = t.gradient, m = t.gradientType, h = t.gradientStartColor, g = t.gradientEndColor, _ = u.value;
+			if (_) {
+				var v = _.getContext("2d");
 				if (v) {
-					var y = g.value, b = typeof window < "u" && window.devicePixelRatio || 1, x = e / u.value * b;
-					if (d.height = d.width = e * b, v.setTransform(x, 0, 0, x, 0, 0), v.fillStyle = n, v.fillRect(0, 0, u.value, u.value), i) {
-						var C = void 0;
-						C = o === "linear" ? v.createLinearGradient(0, 0, u.value, u.value) : v.createRadialGradient(u.value / 2, u.value / 2, 0, u.value / 2, u.value / 2, u.value / 2), C.addColorStop(0, c), C.addColorStop(1, l), v.fillStyle = C;
+					var y = d.value, b = typeof window < "u" && window.devicePixelRatio || 1, x = e / o.value * b;
+					if (_.height = _.width = e * b, v.setTransform(x, 0, 0, x, 0, 0), v.fillStyle = n, v.fillRect(0, 0, o.value, o.value), f) {
+						var S = void 0;
+						S = m === "linear" ? v.createLinearGradient(0, 0, o.value, o.value) : v.createRadialGradient(o.value / 2, o.value / 2, 0, o.value / 2, o.value / 2, o.value / 2), S.addColorStop(0, h), S.addColorStop(1, g), v.fillStyle = S;
 					} else v.fillStyle = r;
-					if (S ? v.fill(new Path2D(f.value)) : s.value.forEach(function(e, t) {
+					if (F ? v.fill(new Path2D(s.value)) : a.value.forEach(function(e, t) {
 						e.forEach(function(e, n) {
-							e && v.fillRect(n + a.value, t + a.value, 1, 1);
+							e && v.fillRect(n + i.value, t + i.value, 1, 1);
 						});
-					}), t.imageSettings.src && y && y.naturalWidth !== 0 && y.naturalHeight !== 0 && p.value) {
-						if (m.value) {
-							var w = m.value;
-							v.fillStyle = t.background, _(v, w.x, w.y, w.width, w.height, w.borderRadius), v.fill();
+					}), t.imageSettings.src && y && y.naturalWidth !== 0 && y.naturalHeight !== 0 && c.value) {
+						if (l.value) {
+							var C = l.value;
+							v.fillStyle = t.background, p(v, C.x, C.y, C.width, C.height, C.borderRadius), v.fill();
 						}
-						var T = p.value.borderRadius;
-						T > 0 ? (v.save(), _(v, p.value.x, p.value.y, p.value.width, p.value.height, T), v.clip(), v.drawImage(y, p.value.x, p.value.y, p.value.width, p.value.height), v.restore()) : v.drawImage(y, p.value.x, p.value.y, p.value.width, p.value.height);
+						var w = c.value.borderRadius;
+						w > 0 ? (v.save(), p(v, c.value.x, c.value.y, c.value.width, c.value.height, w), v.clip(), v.drawImage(y, c.value.x, c.value.y, c.value.width, c.value.height), v.restore()) : v.drawImage(y, c.value.x, c.value.y, c.value.width, c.value.height);
 					}
 				}
 			}
 		};
-		return o(v), l(v, { flush: "post" }), n.expose({
+		return m(h), b(h, { flush: "post" }), n.expose({
 			toDataURL: function(e, t) {
-				return h.value?.toDataURL(e, t);
+				return u.value?.toDataURL(e, t);
 			},
 			download: function(e) {
 				e === void 0 && (e = "qrcode.png");
-				var t = h.value;
-				t && k(t.toDataURL("image/png"), e);
+				var t = u.value;
+				t && H(t.toDataURL("image/png"), e);
 			}
 		}), function() {
-			return i(e, [i("canvas", d(d({}, n.attrs), {
-				ref: h,
+			return f(e, [f("canvas", w(w({}, n.attrs), {
+				ref: u,
 				role: "img",
-				style: d(d({}, n.attrs.style), {
+				style: w(w({}, n.attrs.style), {
 					width: `${t.size}px`,
 					height: `${t.size}px`
 				})
-			})), t.imageSettings.src && i("img", {
-				ref: g,
+			})), t.imageSettings.src && f("img", {
+				ref: d,
 				src: t.imageSettings.src,
 				crossorigin: t.imageSettings.crossOrigin,
 				style: { display: "none" },
-				onLoad: v
+				onLoad: h
 			})]);
 		};
 	}
-}), P = r({
+}), q = d({
 	name: "Qrcode",
-	props: j,
+	props: W,
 	setup: function(e, t) {
-		var n = c();
+		var n = _();
 		return t.expose({
 			toDataURL: function(e, t) {
 				var r;
@@ -1039,7 +1039,7 @@ var A = {
 				return ((t = n.value)?.download)?.call(t, e);
 			}
 		}), function() {
-			return i(e.renderAs === "svg" ? M : N, {
+			return f(e.renderAs === "svg" ? G : K, {
 				ref: n,
 				value: e.value,
 				size: e.size,
@@ -1057,7 +1057,7 @@ var A = {
 			});
 		};
 	}
-}), F = /* @__PURE__ */ r({
+}), J = /* @__PURE__ */ d({
 	__name: "VietQR",
 	props: {
 		renderAs: { default: "svg" },
@@ -1068,16 +1068,17 @@ var A = {
 		accountNo: {},
 		accountName: {},
 		amount: {},
-		content: {}
+		content: {},
+		isCard: { type: Boolean }
 	},
 	setup(e) {
-		let r = e, i = t(() => u(r));
-		return (e, t) => (s(), n(P, {
-			value: i.value,
-			size: r.size,
-			"render-as": r.renderAs,
-			class: a(r.className),
-			"image-settings": r.imageSettings,
+		let t = e, n = r(() => C(t));
+		return (e, r) => (g(), i(q, {
+			value: n.value,
+			size: t.size,
+			"render-as": t.renderAs,
+			class: p(t.className),
+			"image-settings": t.imageSettings,
 			margin: 0,
 			level: "Q"
 		}, null, 8, [
@@ -1088,6 +1089,127 @@ var A = {
 			"image-settings"
 		]));
 	}
-}), I = F;
+}), Y = { style: { display: "inline-block" } }, X = { class: "vqr-modal" }, Z = { class: "vqr-modal__qr" }, Q = {
+	key: 0,
+	class: "vqr-modal__amount"
+}, $ = {
+	key: 1,
+	class: "vqr-modal__hint"
+}, ee = { class: "vqr-modal__hint" }, te = /*#__PURE__*/ ((e, t) => {
+	let n = e.__vccOpts || e;
+	for (let [e, r] of t) n[e] = r;
+	return n;
+})(/* @__PURE__ */ d({
+	__name: "VietQRButton",
+	props: {
+		label: { default: "Thanh toán VietQR" },
+		size: { default: 260 },
+		variant: { default: "default" },
+		bankId: {},
+		accountNo: {},
+		accountName: {},
+		amount: {},
+		content: {},
+		isCard: { type: Boolean }
+	},
+	emits: ["open", "close"],
+	setup(e, { emit: d }) {
+		let f = e, b = d, C = _(!1), w = r(() => f.amount ? new Intl.NumberFormat("vi-VN", {
+			style: "currency",
+			currency: "VND"
+		}).format(f.amount) : null);
+		function T() {
+			C.value = !0, b("open");
+		}
+		function E() {
+			C.value = !1, b("close");
+		}
+		function D(e) {
+			e.key === "Escape" && C.value && E();
+		}
+		y(C, (e) => {
+			typeof document < "u" && (document.body.style.overflow = e ? "hidden" : "");
+		});
+		let O = _(!1);
+		return m(() => {
+			O.value = !0, document.addEventListener("keydown", D);
+		}), h(() => {
+			document.removeEventListener("keydown", D), document.body.style.overflow = "";
+		}), (r, d) => (g(), o("div", Y, [s("button", {
+			class: p(["vqr-btn", `vqr-btn--${e.variant}`]),
+			type: "button",
+			onClick: T
+		}, [d[0] ||= c("<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-v-95ff1acd><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><line x1=\"14\" y1=\"14\" x2=\"14\" y2=\"14\" data-v-95ff1acd></line><line x1=\"17\" y1=\"14\" x2=\"17\" y2=\"14\" data-v-95ff1acd></line><line x1=\"20\" y1=\"14\" x2=\"20\" y2=\"14\" data-v-95ff1acd></line><line x1=\"14\" y1=\"17\" x2=\"14\" y2=\"17\" data-v-95ff1acd></line><line x1=\"17\" y1=\"17\" x2=\"20\" y2=\"17\" data-v-95ff1acd></line><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"20\" data-v-95ff1acd></line></svg>", 1), l(" " + v(e.label), 1)], 2), O.value ? (g(), i(t, {
+			key: 0,
+			to: "body"
+		}, [u(n, { name: "vqr-modal" }, {
+			default: x(() => [C.value ? (g(), o("div", {
+				key: 0,
+				class: "vqr-overlay",
+				role: "dialog",
+				"aria-modal": "true",
+				onClick: S(E, ["self"])
+			}, [s("div", X, [
+				s("button", {
+					class: "vqr-modal__close",
+					"aria-label": "Đóng",
+					onClick: E
+				}, "✕"),
+				d[1] ||= s("p", { class: "vqr-modal__title" }, "Quét mã để thanh toán", -1),
+				s("div", Z, [u(J, {
+					bankId: e.bankId,
+					accountNo: e.accountNo,
+					accountName: e.accountName,
+					amount: e.amount,
+					content: e.content,
+					isCard: e.isCard,
+					size: e.size,
+					renderAs: "svg",
+					level: "Q"
+				}, null, 8, [
+					"bankId",
+					"accountNo",
+					"accountName",
+					"amount",
+					"content",
+					"isCard",
+					"size"
+				])]),
+				w.value ? (g(), o("p", Q, v(w.value), 1)) : a("", !0),
+				e.accountName ? (g(), o("p", $, v(e.accountName), 1)) : a("", !0),
+				s("p", ee, v(e.accountNo), 1)
+			])])) : a("", !0)]),
+			_: 1
+		})])) : a("", !0)]));
+	}
+}), [["__scopeId", "data-v-95ff1acd"]]);
 //#endregion
-export { F as VietQR, I as default };
+//#region src/useVietQR.ts
+function ne(e) {
+	let t = r(() => {
+		let t = "value" in e ? e.value : e;
+		try {
+			return {
+				payload: C(t),
+				isValid: !0,
+				error: null
+			};
+		} catch (e) {
+			return {
+				payload: "",
+				isValid: !1,
+				error: e instanceof Error ? e.message : "Unknown error"
+			};
+		}
+	});
+	return {
+		payload: r(() => t.value.payload),
+		isValid: r(() => t.value.isValid),
+		error: r(() => t.value.error)
+	};
+}
+//#endregion
+//#region src/index.ts
+var re = J;
+//#endregion
+export { J as VietQR, te as VietQRButton, re as default, ne as useVietQR };

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { VietQR } from "@viet-qr/svelte";
-  import { getBankByBin, getBankByShortName } from "@viet-qr/core";
+  import { getBankByBin, getBankByCode } from "@viet-qr/core";
 
   export let bankId: string;
   export let accountNo: string;
@@ -16,8 +16,8 @@
     | { src: string; width: number; height: number; excavate?: boolean }
     | undefined = undefined;
 
-  $: bankInfo = getBankByBin(bankId) || getBankByShortName(bankId);
-  $: bankName = bankInfo?.shortName || bankId;
+  $: bankInfo = getBankByBin(bankId) || getBankByCode(bankId);
+  $: bankName = bankInfo?.name || bankId;
 
   $: formattedAmount = amount
     ? new Intl.NumberFormat("vi-VN", {

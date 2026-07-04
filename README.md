@@ -92,7 +92,7 @@ npm install @viet-qr/templates
 ```tsx
 import { CompactCard } from '@viet-qr/templates/react'; // or /vue, /svelte
 // For Vanilla JS, embed directly via CDN script (see docs)
-import '@viet-qr/templates/style.css';
+import '@viet-qr/templates/styles.css';
 
 function App() {
   return (

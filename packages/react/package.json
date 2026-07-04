@@ -1,9 +1,20 @@
 {
   "name": "@viet-qr/react",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "license": "MIT",
   "author": "Zeforc",
-  "keywords": ["vietqr", "viet-qr", "napas", "emvco", "qr-code", "qr-payment", "payment", "vietnam-qr", "react-qr", "react-vietqr"],
+  "keywords": [
+    "vietqr",
+    "viet-qr",
+    "napas",
+    "emvco",
+    "qr-code",
+    "qr-payment",
+    "payment",
+    "vietnam-qr",
+    "react-qr",
+    "react-vietqr"
+  ],
   "description": "React wrapper for VietQR",
   "repository": {
     "type": "git",

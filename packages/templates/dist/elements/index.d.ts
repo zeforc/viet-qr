@@ -38,6 +38,28 @@ declare class VietQRPayStandee extends HTMLElement {
     private updateData;
 }
 
+declare class VietQRButtonElement extends HTMLElement {
+    static get observedAttributes(): string[];
+    private button;
+    private overlay;
+    private qrContainer;
+    private amountP;
+    private accountNameP;
+    private accountNoP;
+    private isOpen;
+    constructor();
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    attributeChangedCallback(): void;
+    private renderInitial;
+    private bindEvents;
+    private unbindEvents;
+    private openModal;
+    private closeModal;
+    private handleKeydown;
+    private updateData;
+}
+
 /**
  * Đăng ký các Web Components (Custom Elements) vào trình duyệt.
  * Sau khi gọi hàm này, bạn có thể sử dụng các thẻ HTML như:
@@ -47,4 +69,4 @@ declare class VietQRPayStandee extends HTMLElement {
  */
 declare function registerElements(): void;
 
-export { VietQRBasic, VietQRCompactCard, VietQRPayStandee, registerElements };
+export { VietQRBasic, VietQRButtonElement, VietQRCompactCard, VietQRPayStandee, registerElements };

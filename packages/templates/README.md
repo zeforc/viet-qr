@@ -1,3 +1,5 @@
+*Read this in other languages: [English](README.en.md).*
+
 # @viet-qr/templates
 
 [![npm version](https://img.shields.io/npm/v/@viet-qr/templates.svg)](https://www.npmjs.com/package/@viet-qr/templates)
@@ -27,7 +29,7 @@ Một thẻ Card nhỏ gọn, bo tròn mềm mại. Hiển thị mã QR cùng v�
 #### Cho dự án React
 ```tsx
 import { CompactCard } from '@viet-qr/templates/react';
-import '@viet-qr/templates/style.css'; // Bắt buộc import CSS nếu hệ thống không tự động xử lý
+import '@viet-qr/templates/styles.css'; // Bắt buộc import CSS nếu hệ thống không tự động xử lý
 
 function App() {
   return (
@@ -46,7 +48,7 @@ function App() {
 ```vue
 <script setup>
 import { CompactCard } from '@viet-qr/templates/vue';
-import '@viet-qr/templates/style.css'; // Bắt buộc import CSS
+import '@viet-qr/templates/styles.css'; // Bắt buộc import CSS
 </script>
 
 <template>
@@ -64,7 +66,7 @@ import '@viet-qr/templates/style.css'; // Bắt buộc import CSS
 ```svelte
 <script>
   import { CompactCard } from '@viet-qr/templates/svelte';
-  import '@viet-qr/templates/style.css'; // Bắt buộc import CSS
+  import '@viet-qr/templates/styles.css'; // Bắt buộc import CSS
 </script>
 
 <CompactCard 
@@ -107,7 +109,27 @@ import { PayStandee } from '@viet-qr/templates/vue';
 import { PayStandee } from '@viet-qr/templates/svelte';
 
 // Nhúng cho Vanilla JS / HTML
-// <viet-qr-standee bank-id="VCB" ...></viet-qr-standee>
+<viet-qr-standee bank-id="VCB" ...></viet-qr-standee>
+```
+
+### 🔹 Mẫu giao diện `VietQRButton` (Button kèm Modal)
+
+Bắt đầu từ bản `v1.3.0`, thư viện cung cấp một nút bấm thanh toán kèm Modal hiển thị mã QR dưới dạng Web Component cực chuẩn (sử dụng Shadow DOM để đóng gói UI độc lập).
+
+```html
+<!-- Nhúng thư viện -->
+<script src="https://unpkg.com/@viet-qr/templates/dist/elements/index.global.js"></script>
+
+<!-- Sử dụng thẻ VietQRButton trực tiếp trong HTML -->
+<viet-qr-button 
+  bank-id="VCB" 
+  account-no="1122334455"
+  account-name="NGUYEN NGOC A"
+  amount="50000"
+  content="Thanh toan"
+  variant="default"
+  label="Thanh toán VietQR"
+></viet-qr-button>
 ```
 
 ## API Reference (Props)

@@ -45,4 +45,65 @@ interface VietQRProps extends VietQROptions {
 }
 declare const VietQR: React.FC<VietQRProps>;
 
-export { VietQR, type VietQRProps };
+interface UseVietQRReturn {
+    /** Chuỗi EMVCo payload (rỗng nếu lỗi) */
+    payload: string;
+    /** True nếu payload được tạo thành công */
+    isValid: boolean;
+    /** Thông báo lỗi nếu có */
+    error: string | null;
+}
+/**
+ * Hook tiện ích để sinh và quản lý VietQR payload một cách reactive.
+ *
+ * @example
+ * const { payload, isValid, error } = useVietQR({
+ *   bankId: 'VCB',
+ *   accountNo: '1234567890',
+ *   amount: 50000,
+ * });
+ */
+declare function useVietQR(options: VietQROptions): UseVietQRReturn;
+
+interface VietQRButtonProps extends VietQROptions {
+    /**
+     * Nhãn hiển thị trên nút bấm. Mặc định: "Thanh toán VietQR"
+     */
+    label?: string;
+    /**
+     * Kích thước QR hiển thị trong modal (pixel). Mặc định: 260
+     */
+    size?: number;
+    /**
+     * Giao diện màu sắc của nút. Mặc định: 'default'
+     */
+    variant?: 'default' | 'outline' | 'ghost';
+    /**
+     * CSS class tùy chỉnh cho nút bấm
+     */
+    className?: string;
+    /**
+     * Callback khi modal mở
+     */
+    onOpen?: () => void;
+    /**
+     * Callback khi modal đóng
+     */
+    onClose?: () => void;
+}
+/**
+ * Nút bấm "Thanh toán VietQR" tích hợp Modal hiển thị mã QR.
+ * Khi click, một Modal sẽ hiện ra chứa QR code để người dùng quét thanh toán.
+ *
+ * @example
+ * <VietQRButton
+ *   bankId="VCB"
+ *   accountNo="1234567890"
+ *   accountName="NGUYEN VAN A"
+ *   amount={50000}
+ *   label="Thanh toán ngay"
+ * />
+ */
+declare const VietQRButton: React.FC<VietQRButtonProps>;
+
+export { type UseVietQRReturn, VietQR, VietQRButton, type VietQRButtonProps, type VietQRProps, useVietQR };

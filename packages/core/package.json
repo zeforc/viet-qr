@@ -1,9 +1,18 @@
 {
   "name": "@viet-qr/core",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "license": "MIT",
   "author": "Zeforc",
-  "keywords": ["vietqr", "viet-qr", "napas", "emvco", "qr-code", "qr-payment", "payment", "vietnam-qr"],
+  "keywords": [
+    "vietqr",
+    "viet-qr",
+    "napas",
+    "emvco",
+    "qr-code",
+    "qr-payment",
+    "payment",
+    "vietnam-qr"
+  ],
   "description": "Core library for generating VietQR payloads",
   "repository": {
     "type": "git",

@@ -4,14 +4,34 @@ interface VietQROptions {
     accountName?: string;
     amount?: number;
     content?: string;
+    isCard?: boolean;
 }
 declare function generateVietQR(options: VietQROptions): string;
 
+interface VietQRParseResult {
+    isValid: boolean;
+    isDynamic: boolean;
+    isCard?: boolean;
+    beneficiary?: {
+        bankBin: string;
+        accountNo: string;
+        accountName?: string;
+    };
+    transaction?: {
+        amount?: number;
+        content?: string;
+    };
+    rawTags?: Record<string, string>;
+    errorMessage?: string;
+}
+declare function parseVietQR(qrString: string): VietQRParseResult;
+
 interface Bank {
     bin: string;
-    shortName: string;
+    code: string;
     name: string;
     fullName: string;
+    swiftCode?: string;
 }
 declare const banks: Bank[];
 
@@ -30,9 +50,13 @@ declare function setBankList(banks: Bank[]): void;
  */
 declare function getBankByBin(bin: string): Bank | undefined;
 /**
- * Lấy thông tin ngân hàng qua mã Tên viết tắt (shortName) (O(1))
+ * Lấy thông tin ngân hàng qua mã Code (O(1))
  */
-declare function getBankByShortName(shortName: string): Bank | undefined;
+declare function getBankByCode(code: string): Bank | undefined;
+/**
+ * Lấy thông tin ngân hàng qua tên (Note: shortName) (O(1))
+ */
+declare function getBankByName(name: string): Bank | undefined;
 /**
  * Cập nhật danh sách ngân hàng từ một API hoặc CDN bất kỳ.
  * API/CDN trả về phải có cấu trúc giống hệt API v2/banks của vietqr.io (có mảng .data)
@@ -56,4 +80,4 @@ declare function sanitizeContent(content: string): string;
  */
 declare function sanitizeAccountName(name: string): string;
 
-export { type Bank, type VietQROptions, banks, calculateCRC16, fetchBankList, generateVietQR, getBankByBin, getBankByShortName, removeVietnameseAccents, sanitizeAccountName, sanitizeContent, setBankList };
+export { type Bank, type VietQROptions, type VietQRParseResult, banks, calculateCRC16, fetchBankList, generateVietQR, getBankByBin, getBankByCode, getBankByName, parseVietQR, removeVietnameseAccents, sanitizeAccountName, sanitizeContent, setBankList };

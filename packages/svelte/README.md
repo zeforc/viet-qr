@@ -1,3 +1,5 @@
+*Read this in other languages: [English](README.en.md).*
+
 # @viet-qr/svelte
 
 [![npm version](https://img.shields.io/npm/v/@viet-qr/svelte.svg)](https://www.npmjs.com/package/@viet-qr/svelte)
@@ -54,7 +56,7 @@ npm install @viet-qr/templates
 ```svelte
 <script>
   import { CompactCard } from '@viet-qr/templates/svelte';
-  import '@viet-qr/templates/style.css'; // Bắt buộc import css nếu hệ thống không tự xử lý
+  import '@viet-qr/templates/styles.css'; // Bắt buộc import css nếu hệ thống không tự xử lý
 </script>
 
 <CompactCard 
@@ -64,6 +66,45 @@ npm install @viet-qr/templates
   amount={50000}
   theme="dark"
 />
+```
+
+## 🔘 Nút Thanh Toán (Payment Button & Modal)
+
+Bắt đầu từ bản `v1.3.0`, thư viện cung cấp thêm `VietQRButton` - một nút bấm tích hợp sẵn Modal thanh toán tiện lợi:
+
+```svelte
+<script>
+  import { VietQRButton } from '@viet-qr/svelte';
+</script>
+
+<VietQRButton 
+  bankId="VCB" 
+  accountNo="1122334455"
+  accountName="NGUYEN NGOC A"
+  amount={50000}
+  content="Thanh toan"
+  variant="default" <!-- 'default' | 'outline' | 'ghost' -->
+  label="Thanh toán VietQR"
+/>
+```
+
+## 🪝 Store: `useVietQR`
+
+Bạn cũng có thể tự tạo UI mã QR riêng hoàn toàn nhờ vào hook `useVietQR`:
+
+```svelte
+<script>
+  import { useVietQR } from '@viet-qr/svelte';
+
+  const { qrPayload, isError, generate } = useVietQR({
+    bankId: 'VCB',
+    accountNo: '1122334455'
+  });
+</script>
+
+<div>
+  <!-- Dùng thư viện vẽ QR bất kỳ để render $qrPayload -->
+</div>
 ```
 
 ## API Reference (Props)
@@ -77,6 +118,7 @@ Component `<VietQR />` kế thừa toàn bộ thuộc tính cấu hình chuẩn 
 | `accountName`   | `string`            | **Khuyên dùng**. Tên chủ tài khoản (Hiển thị trong Tag 59 của EMVCo). Nếu bỏ trống sẽ tự động hiển thị 'NA'. |
 | `amount`        | `number`            | Số tiền (Không bắt buộc). Nếu có sẽ sinh ra mã QR Động, không có sẽ sinh mã QR Tĩnh.  |
 | `content`       | `string`            | Nội dung chuyển tiền (Tự động xóa dấu tiếng Việt an toàn).                            |
+| `isCard`        | `boolean`           | Chuyển khoản qua số Thẻ (Card Number) thay vì Số tài khoản. Mặc định là `false`.      |
 | `renderAs`      | `'svg' \| 'canvas'` | Định dạng hiển thị. Mặc định là `svg`.                                                |
 | `size`          | `number`            | Kích thước (pixels). Mặc định là `256`.                                               |
 | `fgColor`       | `string`            | Màu các chấm QR (Mặc định: `#000000`).                                                |
