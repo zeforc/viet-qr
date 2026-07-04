@@ -1062,6 +1062,7 @@ var U = {
 	props: {
 		renderAs: { default: "svg" },
 		size: { default: 256 },
+		level: { default: "Q" },
 		className: {},
 		imageSettings: {},
 		bankId: {},
@@ -1080,22 +1081,23 @@ var U = {
 			class: p(t.className),
 			"image-settings": t.imageSettings,
 			margin: 0,
-			level: "Q"
+			level: t.level
 		}, null, 8, [
 			"value",
 			"size",
 			"render-as",
 			"class",
-			"image-settings"
+			"image-settings",
+			"level"
 		]));
 	}
-}), Y = { style: { display: "inline-block" } }, X = { class: "vqr-modal" }, Z = { class: "vqr-modal__qr" }, Q = {
+}), Y = { style: { display: "inline-block" } }, X = { class: "vqr-modal__qr" }, Z = {
 	key: 0,
 	class: "vqr-modal__amount"
-}, $ = {
+}, Q = {
 	key: 1,
 	class: "vqr-modal__hint"
-}, ee = { class: "vqr-modal__hint" }, te = /*#__PURE__*/ ((e, t) => {
+}, $ = { class: "vqr-modal__hint" }, ee = /*#__PURE__*/ ((e, t) => {
 	let n = e.__vccOpts || e;
 	for (let [e, r] of t) n[e] = r;
 	return n;
@@ -1105,6 +1107,7 @@ var U = {
 		label: { default: "Thanh toán VietQR" },
 		size: { default: 260 },
 		variant: { default: "default" },
+		theme: { default: "light" },
 		bankId: {},
 		accountNo: {},
 		accountName: {},
@@ -1139,7 +1142,7 @@ var U = {
 			class: p(["vqr-btn", `vqr-btn--${e.variant}`]),
 			type: "button",
 			onClick: T
-		}, [d[0] ||= c("<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-v-95ff1acd><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" data-v-95ff1acd></rect><line x1=\"14\" y1=\"14\" x2=\"14\" y2=\"14\" data-v-95ff1acd></line><line x1=\"17\" y1=\"14\" x2=\"17\" y2=\"14\" data-v-95ff1acd></line><line x1=\"20\" y1=\"14\" x2=\"20\" y2=\"14\" data-v-95ff1acd></line><line x1=\"14\" y1=\"17\" x2=\"14\" y2=\"17\" data-v-95ff1acd></line><line x1=\"17\" y1=\"17\" x2=\"20\" y2=\"17\" data-v-95ff1acd></line><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"20\" data-v-95ff1acd></line></svg>", 1), l(" " + v(e.label), 1)], 2), O.value ? (g(), i(t, {
+		}, [d[0] ||= c("<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" data-v-95aa697c><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" data-v-95aa697c></rect><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" data-v-95aa697c></rect><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" data-v-95aa697c></rect><line x1=\"14\" y1=\"14\" x2=\"14\" y2=\"14\" data-v-95aa697c></line><line x1=\"17\" y1=\"14\" x2=\"17\" y2=\"14\" data-v-95aa697c></line><line x1=\"20\" y1=\"14\" x2=\"20\" y2=\"14\" data-v-95aa697c></line><line x1=\"14\" y1=\"17\" x2=\"14\" y2=\"17\" data-v-95aa697c></line><line x1=\"17\" y1=\"17\" x2=\"20\" y2=\"17\" data-v-95aa697c></line><line x1=\"20\" y1=\"20\" x2=\"20\" y2=\"20\" data-v-95aa697c></line></svg>", 1), l(" " + v(e.label), 1)], 2), O.value ? (g(), i(t, {
 			key: 0,
 			to: "body"
 		}, [u(n, { name: "vqr-modal" }, {
@@ -1149,14 +1152,14 @@ var U = {
 				role: "dialog",
 				"aria-modal": "true",
 				onClick: S(E, ["self"])
-			}, [s("div", X, [
+			}, [s("div", { class: p(["vqr-modal", { "vqr-modal--dark": e.theme === "dark" }]) }, [
 				s("button", {
 					class: "vqr-modal__close",
 					"aria-label": "Đóng",
 					onClick: E
 				}, "✕"),
 				d[1] ||= s("p", { class: "vqr-modal__title" }, "Quét mã để thanh toán", -1),
-				s("div", Z, [u(J, {
+				s("div", X, [u(J, {
 					bankId: e.bankId,
 					accountNo: e.accountNo,
 					accountName: e.accountName,
@@ -1175,17 +1178,17 @@ var U = {
 					"isCard",
 					"size"
 				])]),
-				w.value ? (g(), o("p", Q, v(w.value), 1)) : a("", !0),
-				e.accountName ? (g(), o("p", $, v(e.accountName), 1)) : a("", !0),
-				s("p", ee, v(e.accountNo), 1)
-			])])) : a("", !0)]),
+				w.value ? (g(), o("p", Z, v(w.value), 1)) : a("", !0),
+				e.accountName ? (g(), o("p", Q, v(e.accountName), 1)) : a("", !0),
+				s("p", $, v(e.accountNo), 1)
+			], 2)])) : a("", !0)]),
 			_: 1
 		})])) : a("", !0)]));
 	}
-}), [["__scopeId", "data-v-95ff1acd"]]);
+}), [["__scopeId", "data-v-95aa697c"]]);
 //#endregion
 //#region src/useVietQR.ts
-function ne(e) {
+function te(e) {
 	let t = r(() => {
 		let t = "value" in e ? e.value : e;
 		try {
@@ -1210,6 +1213,6 @@ function ne(e) {
 }
 //#endregion
 //#region src/index.ts
-var re = J;
+var ne = J;
 //#endregion
-export { J as VietQR, te as VietQRButton, re as default, ne as useVietQR };
+export { J as VietQR, ee as VietQRButton, ne as default, te as useVietQR };

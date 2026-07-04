@@ -7,6 +7,7 @@
   export let accountName: string | undefined = undefined;
   export let amount: number | undefined = undefined;
   export let content: string | undefined = undefined;
+  export let isCard: boolean = false;
   export let size: number = 240;
   export let renderAs: "svg" | "canvas" = "svg";
 
@@ -43,6 +44,7 @@
       {accountName}
       {amount}
       {content}
+      {isCard}
       {size}
       {renderAs}
       {imageSettings}

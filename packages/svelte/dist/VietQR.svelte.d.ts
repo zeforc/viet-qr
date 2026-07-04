@@ -17,8 +17,10 @@ declare const VietQR: $$__sveltets_2_IsomorphicComponent<{
     accountName?: string | undefined;
     amount?: number | undefined;
     content?: string | undefined;
+    isCard?: boolean;
     size?: number;
     renderAs?: "svg" | "canvas";
+    level?: "L" | "M" | "Q" | "H";
     imageSettings?: {
         src: string;
         width: number;

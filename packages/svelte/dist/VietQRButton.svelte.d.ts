@@ -21,6 +21,7 @@ declare const VietQRButton: $$__sveltets_2_IsomorphicComponent<{
     label?: string;
     size?: number;
     variant?: "default" | "outline" | "ghost";
+    theme?: "light" | "dark";
 }, {
     open: CustomEvent<void>;
     close: CustomEvent<void>;

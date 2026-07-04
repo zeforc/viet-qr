@@ -7,9 +7,11 @@
   export let accountName: string | undefined = undefined;
   export let amount: number | undefined = undefined;
   export let content: string | undefined = undefined;
+  export let isCard: boolean = false;
 
   export let size: number = 256;
   export let renderAs: "svg" | "canvas" = "svg";
+  export let level: "L" | "M" | "Q" | "H" = "Q";
   export let imageSettings:
     | { src: string; width: number; height: number; excavate?: boolean }
     | undefined = undefined;
@@ -23,6 +25,7 @@
     accountName,
     amount,
     content,
+    isCard,
   });
 
   $: if (payload && renderAs === "svg") {
@@ -32,7 +35,7 @@
         type: "svg",
         width: size,
         margin: 0,
-        errorCorrectionLevel: "Q",
+        errorCorrectionLevel: level,
       },
       (err, string) => {
         if (!err) svgContent = string;
@@ -44,7 +47,7 @@
     QRCode.toCanvas(canvasElement, payload, {
       width: size,
       margin: 0,
-      errorCorrectionLevel: "Q",
+      errorCorrectionLevel: level,
     });
   }
 </script>

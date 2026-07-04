@@ -20,6 +20,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 		accountName: {},
 		amount: {},
 		content: {},
+		isCard: { type: Boolean },
 		size: { default: 240 },
 		renderAs: { default: "svg" },
 		bankLogo: {},
@@ -36,6 +37,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 			accountName: E.accountName,
 			amount: E.amount,
 			content: E.content,
+			isCard: E.isCard,
 			size: E.size,
 			renderAs: E.renderAs,
 			imageSettings: E.imageSettings
@@ -66,6 +68,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 		accountName: {},
 		amount: {},
 		content: {},
+		isCard: { type: Boolean },
 		size: { default: 200 },
 		renderAs: { default: "svg" },
 		title: { default: "Quét mã để thanh toán" },
@@ -80,6 +83,7 @@ var h = { class: "vqr-compact-card__header" }, g = ["src", "alt"], _ = {
 			accountName: h.accountName,
 			amount: h.amount,
 			content: h.content,
+			isCard: h.isCard,
 			size: h.size,
 			renderAs: h.renderAs,
 			imageSettings: h.imageSettings

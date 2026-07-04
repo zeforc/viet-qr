@@ -7,6 +7,7 @@
   export let accountName: string | undefined = undefined;
   export let amount: number | undefined = undefined;
   export let content: string | undefined = undefined;
+  export let isCard: boolean = false;
   export let size: number = 200;
   export let renderAs: 'svg' | 'canvas' = 'svg';
 
@@ -27,12 +28,13 @@
 
   <div class="vqr-pay-standee__body">
     <div class="vqr-pay-standee__qr-wrapper">
-      <VietQR 
+      <VietQR
         {bankId}
         {accountNo}
         {accountName}
         {amount}
         {content}
+        {isCard}
         {size}
         {renderAs}
         {imageSettings}

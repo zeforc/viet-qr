@@ -36,7 +36,7 @@ interface VietQRProps extends VietQROptions {
         src: string;
         height: number;
         width: number;
-        excavate: boolean;
+        excavate?: boolean;
         x?: number;
         y?: number;
     };
@@ -78,6 +78,10 @@ interface VietQRButtonProps extends VietQROptions {
      * Giao diện màu sắc của nút. Mặc định: 'default'
      */
     variant?: 'default' | 'outline' | 'ghost';
+    /**
+     * Giao diện sáng/tối của Modal hiển thị QR. Mặc định: 'light'
+     */
+    theme?: 'light' | 'dark';
     /**
      * CSS class tùy chỉnh cho nút bấm
      */

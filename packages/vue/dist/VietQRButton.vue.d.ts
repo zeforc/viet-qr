@@ -12,6 +12,10 @@ interface VietQRButtonProps extends VietQROptions {
      * Giao diện màu sắc của nút. Mặc định: 'default'
      */
     variant?: 'default' | 'outline' | 'ghost';
+    /**
+     * Giao diện sáng/tối của Modal hiển thị QR. Mặc định: 'light'
+     */
+    theme?: 'light' | 'dark';
 }
 declare const _default: import('vue').DefineComponent<VietQRButtonProps, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
     close: () => any;
@@ -23,5 +27,6 @@ declare const _default: import('vue').DefineComponent<VietQRButtonProps, {}, {},
     size: number;
     label: string;
     variant: "default" | "outline" | "ghost";
+    theme: "light" | "dark";
 }, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>;
 export default _default;
